@@ -1,0 +1,6 @@
+Final Explanation (Super Simple Version)
+
+1) User → Can have many Zaps.
+2) Zap → Belongs to one User and can have many Triggers.
+3) Trigger → Belongs to one Zap and one AvailableTrigger type.
+4) AvailableTriggers → A list of different types of triggers.
