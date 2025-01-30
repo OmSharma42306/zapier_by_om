@@ -4,3 +4,5 @@ Final Explanation (Super Simple Version)
 2) Zap → Belongs to one User and can have many Triggers.
 3) Trigger → Belongs to one Zap and one AvailableTrigger type.
 4) AvailableTriggers → A list of different types of triggers.
+5) Action -> Belongs to one Zap and one AvilableActions type.
+6) AvilableActions -> A list of different types of actions.

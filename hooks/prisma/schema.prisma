@@ -26,21 +26,36 @@ model Zap{
   id String @id @default(uuid())
   userId Int
   user User @relation(fields: [userId],references: [id])
-  trigger Trigger[]
+  trigger Trigger?
+  action Actions[]
 }
 
 model Trigger{
   id String @id @default(uuid())
-  zapId String
+  zapId String @unique
   zap Zap @relation(fields: [zapId],references: [id])
   typeId String
   type Avilabletriggers @relation(fields: [typeId],references: [id])
-}
-
+  }
 
 model Avilabletriggers{
   id String @id @default(uuid())
   triggerName String
-  triggerId String
   triggers Trigger[]
+}
+
+
+model Actions{
+  id String @id @default(uuid())
+  typeId String
+  type AvilableActions @relation(fields: [typeId],references: [id])
+  zapId String
+  zap Zap @relation(fields: [zapId],references: [id])
+  }
+
+model AvilableActions{
+  id String @id @default(uuid())
+  actionName String
+  actions Actions[]
+
 }
