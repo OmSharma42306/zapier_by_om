@@ -6,3 +6,33 @@ Final Explanation (Super Simple Version)
 4) AvailableTriggers → A list of different types of triggers.
 5) Action -> Belongs to one Zap and one AvilableActions type.
 6) AvilableActions -> A list of different types of actions.
+
+
+
+
+
+
+
+
+Do you need triggerId in Zap?
+Not strictly required, because Trigger already has zapId, which forms the relationship.
+However, if you want to easily query Zap and get the Trigger in a single query, adding triggerId helps.
+
+
+model Zap{
+  id String @id @default(uuid())
+  userId Int
+  user User @relation(fields: [userId],references: [id])
+  triggerId String
+  trigger Trigger? // one to one
+  action Actions[] // one to many
+  zapRuns ZapRuns[] // one to many
+}
+
+model Trigger{
+  id String @id @default(uuid())
+  zapId String @unique
+  zap Zap @relation(fields: [zapId],references: [id])
+  typeId String
+  type Avilabletriggers @relation(fields: [typeId],references: [id])
+  }

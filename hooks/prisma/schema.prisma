@@ -26,8 +26,11 @@ model Zap{
   id String @id @default(uuid())
   userId Int
   user User @relation(fields: [userId],references: [id])
-  trigger Trigger?
-  action Actions[]
+  triggerId String  // like already referenced foregin key in trigger table using zapId.. it
+                    // good to have trigger id for querying data.
+  trigger Trigger? // one to one
+  action Actions[] // one to many
+  zapRuns ZapRuns[] // one to many
 }
 
 model Trigger{
@@ -58,4 +61,18 @@ model AvilableActions{
   actionName String
   actions Actions[]
 
+}
+
+model ZapRuns{
+  id String @id @default(uuid())
+  zapId String
+  metadata Json
+  zap Zap @relation(fields: [zapId],references: [id])
+  zapRunOutbox ZapRunOutbox?
+}
+
+model ZapRunOutbox{
+  id String @id @default(uuid())
+  zapRunId String @unique
+  zapRun ZapRuns @relation(fields: [zapRunId],references: [id])
 }
