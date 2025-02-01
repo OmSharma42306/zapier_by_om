@@ -15,7 +15,8 @@ app.post("/hooks/catch/:userId/:zapId",async (req,res)=>{
     await client.$transaction(async tx=>{
         const run = await tx.zapRuns.create({
             data:{
-                zapId:zapId
+                zapId:zapId,
+                metadata:body
             }
         });
 
@@ -27,7 +28,7 @@ app.post("/hooks/catch/:userId/:zapId",async (req,res)=>{
 
     })
 
-
+    
 
 
 
