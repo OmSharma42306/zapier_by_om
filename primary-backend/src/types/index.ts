@@ -11,3 +11,13 @@ export const signInSchema = z.object({
     password : z.string().min(8)
 });
 
+export const zapCreateSchema = z.object({
+    avilableTriggerId : z.string(),
+    triggerMetaData : z.any().optional(),
+    actions : z.array(z.object({
+        avilableActionId : z.string(),
+        actionMetaData : z.any().optional(),
+        sortingOrder : z.any()
+    }))
+});
+
