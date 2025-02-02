@@ -95,7 +95,7 @@ router.post('/login',async(req:any,res:any)=>{
 
 
 // user service endpoint
-router.post('/user',authMiddleware,async(req:AuthRequest | any,res:Response | any)=>{
+router.get('/users',authMiddleware,async(req:AuthRequest | any,res:Response | any)=>{
     // after login for user services
     
     
