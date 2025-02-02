@@ -14,6 +14,7 @@ datasource db {
 }
 
 
+
 model User{
   id Int @id @default(autoincrement())
   name String?
@@ -25,20 +26,22 @@ model User{
 model Zap{
   id String @id @default(uuid())
   userId Int
-  user User @relation(fields: [userId],references: [id])
-  triggerId String  // like already referenced foregin key in trigger table using zapId.. it
+  triggerId String
+
+// like already referenced foregin key in trigger table using zapId.. it
                     // good to have trigger id for querying data.
   trigger Trigger? // one to one
-  action Actions[] // one to many
+  action Action[] // one to many
   zapRuns ZapRuns[] // one to many
+  user User @relation(fields: [userId],references: [id])
 }
 
 model Trigger{
   id String @id @default(uuid())
   zapId String @unique
   zap Zap @relation(fields: [zapId],references: [id])
-  typeId String
-  type Avilabletriggers @relation(fields: [typeId],references: [id])
+  triggerId String
+  type Avilabletriggers @relation(fields: [triggerId],references: [id])
   }
 
 model Avilabletriggers{
@@ -48,18 +51,20 @@ model Avilabletriggers{
 }
 
 
-model Actions{
+model Action{
   id String @id @default(uuid())
-  typeId String
-  type AvilableActions @relation(fields: [typeId],references: [id])
+  actionId String
   zapId String
+  //metadata Json
+  type AvilableActions @relation(fields: [actionId],references: [id])
   zap Zap @relation(fields: [zapId],references: [id])
+  sortingOrder Int @default(0)
   }
 
 model AvilableActions{
   id String @id @default(uuid())
   actionName String
-  actions Actions[]
+  actions Action[]
 
 }
 
