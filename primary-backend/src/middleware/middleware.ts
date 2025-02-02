@@ -3,11 +3,17 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET : string | undefined = process.env.JWT_SECRET;
 
-async function authMiddleware(req:Request,res:Response,next:NextFunction){
-    
+interface AuthRequest extends Request{
+    userId? : string;
+}
+
+
+async function authMiddleware(req:AuthRequest,res:Response,next:NextFunction){
+    console.log("i am here!")
     const authHeader = req.headers["authorization"];
+    console.log(authHeader)
     try{
-        if(!authHeader || authHeader.startsWith("Bearer ")){
+        if(!authHeader || !authHeader.startsWith("Bearer ")){
             res.json({msg:"Missing Headers!"});
         }
     
@@ -16,11 +22,13 @@ async function authMiddleware(req:Request,res:Response,next:NextFunction){
         if(!decodedToken){
             res.json({msg:"Middleware Failed!"});
         }
+        console.log("Successfully! token created!",token)
     
         // @ts-ignore
         
         req.userId = decodedToken.id;
-    
+        
+        console.log("calling next function!")
         next();
     
     }catch(error){

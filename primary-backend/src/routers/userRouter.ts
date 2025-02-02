@@ -4,16 +4,22 @@ import {client} from "../db/client"
 import jwt from "jsonwebtoken";
 import authMiddleware from "../middleware/middleware";
 import {signInSchema,signUpSchema} from "../types/index"
+// import dotenv from "dotenv"
 
-const JWT_SECRET : string | undefined = process.env.JSONWEBTOKEN;
+// dotenv.config();
+
+const JWT_SECRET : string | any = process.env.JWT_SECRET;
 console.log(JWT_SECRET);
 
 const router = Router();
 
-
+// interface for req.id
+interface AuthRequest extends Request{
+    userId? : string;
+}
 
 // signup endpoint
-router.post('/signup',async(req,res)=>{
+router.post('/signup',async(req:any,res:any)=>{
     
     const name = req.body.name;
     const email = req.body.email;
@@ -22,12 +28,12 @@ router.post('/signup',async(req,res)=>{
     try{    
         const {success} = signUpSchema.safeParse(req.body);
         if(!success){
-            res.status(411).json({msg:"Invalid Inputs!"});
+           return res.status(411).json({msg:"Invalid Inputs!"});
         } 
     
         const checkUser = await client.user.findMany({where:{email:email}});
         if(checkUser.length>0){
-            res.status(409).json({msg:"User Already Exists!"})  // use 409 for conflicts like already existing data.
+            return res.status(409).json({msg:"User Already Exists!"})  // use 409 for conflicts like already existing data.
         }
         
         const salt = await bcrypt.genSalt(saltCycles);
@@ -41,7 +47,9 @@ router.post('/signup',async(req,res)=>{
             }
         });
 
-        res.status(200).json({msg:"Account Succesfully Created!"});
+        // await sendEmail();
+
+        return res.status(200).json({msg:"Account Succesfully Created!"});
 
 
     }catch(error){
@@ -52,34 +60,34 @@ router.post('/signup',async(req,res)=>{
 })
 
 // login endpoint
-router.post('/login',async(req,res)=>{
+router.post('/login',async(req:any,res:any)=>{
     const email = req.body.email;
     const password = req.body.password;
 
     try{
         const {success} = signInSchema.safeParse(req.body);
         if(!success){
-            res.status(411).json({msg:"Invalid Inputs!"})
+            return res.status(411).json({msg:"Invalid Inputs!"})
         }
         const checkUser : any = await client.user.findFirst({where:{email:email}})
         if(!checkUser){
-            res.status(404).json({msg:"user not exists!"});
+            return res.status(404).json({msg:"user not exists!"});
         }
 
         
         const verifyPassword = await bcrypt.compare(password,checkUser?.password)
         if(!verifyPassword){
-            res.status(401).json({msg:"Invalid Credentials!"})
+            return res.status(401).json({msg:"Invalid Credentials!"})
         }
 
-        const token = await jwt.sign(checkUser?.id,JWT_SECRET as string);
+        const token = await jwt.sign({id:checkUser?.id},JWT_SECRET as string);
 
 
-        res.status(200).json({msg:"Login Successful",token});
+        return res.status(200).json({msg:"Login Successful",token});
         
 
     }catch(error){
-        res.status(400).json({error});
+        return res.status(400).json({error});
     }
 
 
@@ -87,8 +95,23 @@ router.post('/login',async(req,res)=>{
 
 
 // user service endpoint
-router.post('/user',authMiddleware,async(req,res)=>{
+router.post('/user',authMiddleware,async(req:AuthRequest | any,res:Response | any)=>{
     // after login for user services
+    
+    
+    const id = req.userId;
+    try{
+        const getUserDetails = await client.user.findFirst({where:{id:id},select:{
+            name:true,
+            email:true
+        }});
+
+        return res.json({getUserDetails});
+
+    }catch(error){
+
+    }
+
 })
 
 export const userRouter = router;
