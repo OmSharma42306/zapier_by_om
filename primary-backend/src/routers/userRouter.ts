@@ -1,23 +1,30 @@
 import {Router} from "express"
 import bcrypt from "bcrypt"
-import {PrismaClient} from "prisma/prisma-client"
+import {client} from "../db/client"
 import jwt from "jsonwebtoken";
 import authMiddleware from "../middleware/middleware";
+import {signInSchema,signUpSchema} from "../types/index"
 
 const JWT_SECRET : string | undefined = process.env.JSONWEBTOKEN;
 console.log(JWT_SECRET);
 
 const router = Router();
-const client = new PrismaClient();
+
 
 
 // signup endpoint
 router.post('/signup',async(req,res)=>{
+    
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
     const saltCycles = 10;
     try{    
+        const {success} = signUpSchema.safeParse(req.body);
+        if(!success){
+            res.status(411).json({msg:"Invalid Inputs!"});
+        } 
+    
         const checkUser = await client.user.findMany({where:{email:email}});
         if(checkUser.length>0){
             res.status(409).json({msg:"User Already Exists!"})  // use 409 for conflicts like already existing data.
@@ -50,6 +57,10 @@ router.post('/login',async(req,res)=>{
     const password = req.body.password;
 
     try{
+        const {success} = signInSchema.safeParse(req.body);
+        if(!success){
+            res.status(411).json({msg:"Invalid Inputs!"})
+        }
         const checkUser : any = await client.user.findFirst({where:{email:email}})
         if(!checkUser){
             res.status(404).json({msg:"user not exists!"});
