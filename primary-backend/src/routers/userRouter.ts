@@ -20,11 +20,14 @@ interface AuthRequest extends Request{
 
 // signup endpoint
 router.post('/signup',async(req:any,res:any)=>{
-    
+    console.log("i am here at signup")
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
     const saltCycles = 10;
+    console.log(email)
+    console.log(password)
+    console.log(name)
     try{    
         const {success} = signUpSchema.safeParse(req.body);
         if(!success){
