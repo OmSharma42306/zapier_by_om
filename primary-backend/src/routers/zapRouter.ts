@@ -59,6 +59,7 @@ router.post('/',authMiddleware,async(req:any,res:any)=>{
 router.get('/get-all-zaps',authMiddleware,async(req:any,res:any)=>{
     // get all zaps
     const id = req.userId;
+    console.log("userId",id)
     const allZaps = await client.zap.findMany({where:{
         userId:id
     },
@@ -74,10 +75,12 @@ router.get('/get-all-zaps',authMiddleware,async(req:any,res:any)=>{
             }
         }
     }
-
-});
     
+});
 
+
+    
+    console.log(allZaps)
     res.json({allZaps});
 })
 
