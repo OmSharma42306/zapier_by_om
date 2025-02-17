@@ -84,6 +84,10 @@ router.get('/get-all-zaps',authMiddleware,async(req:any,res:any)=>{
     res.json({allZaps});
 })
 
+
+
+
+
 router.get('/:id',authMiddleware,async(req:any,res:any)=>{
     // particular zap 
     const id = req.id;
@@ -109,11 +113,6 @@ trigger:{
 
 
 })
-
-
-
-
-
 
 
 export const zapRouter = router;
