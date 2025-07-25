@@ -1,7 +1,7 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 
-const PORT = 3000;
+const PORT = 3004;
 const app = express();
 
 const client = new PrismaClient();
@@ -9,9 +9,12 @@ const client = new PrismaClient();
 app.post("/hooks/catch/:userId/:zapId",async (req,res)=>{
     const userId = req.params.userId;
     const zapId = req.params.zapId;
-    const body = req.body;
+    const f = req.body;
+    console.log("f",f);
+    const body = "xx";
+    
     // add zapRun and add ZapRunOutbox info to database using transaction.
-
+    console.log("i am hit",userId,zapId,body);
     await client.$transaction(async tx=>{
         const run = await tx.zapRuns.create({
             data:{
@@ -28,11 +31,9 @@ app.post("/hooks/catch/:userId/:zapId",async (req,res)=>{
 
     })
 
-    
-
-
-
     // add process to kafka.
+
+
 })
 
 

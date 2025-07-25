@@ -12,6 +12,7 @@
   "dependencies": {
     "@prisma/client": "^6.3.0",
     "@types/kafkajs": "^1.9.0",
+    "bullmq": "^5.56.5",
     "kafkajs": "^2.2.4",
     "prisma": "^6.3.0"
   }
