@@ -4,10 +4,11 @@ import bcrypt from "bcrypt"
 import {prismaClient as client} from "@repo/db/client";
 import jwt from "jsonwebtoken";
 import authMiddleware from "../middleware/middleware";
-import {signInSchema,signUpSchema} from "@repo/common/src/index"
-// import dotenv from "dotenv"
+//@ts-ignore
+import {signInSchema,signUpSchema} from "@repo/common/validation"
+import dotenv from "dotenv"
 
-// dotenv.config();
+dotenv.config();
 
 const JWT_SECRET : string | any = process.env.JWT_SECRET;
 console.log(JWT_SECRET);

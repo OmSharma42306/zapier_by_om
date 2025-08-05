@@ -1,8 +1,10 @@
 import { Router } from "express";
 import authMiddleware from "../middleware/middleware";
-import { zapCreateSchema } from "@repo/common/src/index";
+//@ts-ignore
+import {zapCreateSchema} from "@repo/common/validation"
 // @ts-ignore
 import {prismaClient as client} from "@repo/db/client";
+
 const router = Router();
 
 
@@ -21,7 +23,7 @@ router.post('/',authMiddleware,async(req:any,res:any)=>{
                 userId:id,
                 triggerId:"",
                 action:{
-                    create:parsedData.data.actions.map((x,index)=>({
+                    create:parsedData.data.actions.map((x:any,index:any)=>({
                         actionId:x.avilableActionId,
                         sortingOrder:index
                     }))
