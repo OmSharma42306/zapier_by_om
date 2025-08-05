@@ -1,16 +1,24 @@
-
-// @ts-ignore
-import {prismaClient} from "@repo/db/client";
-// import { prismaClient} from "@repo/db/src/index";
 import express from "express";
-import { Request,Response } from "express";
-
+import cors from "cors";
+import { userRouter } from "./routes/userRouter";
+import { zapRouter } from "./routes/zapRouter";
+import { triggerRouter } from "./routes/trigger";
+import { actionRouter } from "./routes/action"
 const app = express();
+const PORT = 5000;
 
-app.get('/r',async(req:Request,res:Response)=>{
-    const user = await prismaClient.user.findMany();
-    console.log(user);
-});
+app.use(cors());
+app.use(express.json());
+
+app.use('/api/v1/user',userRouter);
+app.use('/api/v1/zap',zapRouter);
+app.use('/api/v1/trigger',triggerRouter);
+app.use('/api/v1/action',actionRouter);
+app.get('/',(req,res)=>{
+    res.json({msg:"Hi! Welcome to Primary Backend"})
+})
 
 
-app.listen(3000,()=>{console.log("Server Started!")});
+app.listen(PORT,()=>{
+    console.log(`Primary Backend Server Started at ${PORT}`);
+})

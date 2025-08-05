@@ -9,13 +9,13 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@repo/db": "*",
     "@types/node": "^24.2.0",
     "prettier": "^3.6.2",
     "prisma": "^6.13.0",
     "tsx": "^4.20.3",
     "turbo": "^2.5.5",
-    "typescript": "^5.8.3",
-    "@repo/db" : "*"
+    "typescript": "^5.8.3"
   },
   "engines": {
     "node": ">=18"
@@ -26,6 +26,8 @@
     "packages/*"
   ],
   "dependencies": {
-    "@prisma/client": "^6.13.0"
+    "@prisma/client": "^6.13.0",
+    "@types/cors": "^2.8.19",
+    "cors": "^2.8.5"
   }
 }
