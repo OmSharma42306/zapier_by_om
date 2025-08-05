@@ -1,0 +1,19 @@
+{
+  "name": "@repo/db",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build":"tsc -b"
+  },
+  "exports":{
+    "./client":"./dist/index.js"
+  },
+  "type":"commonjs",
+   "devDependencies": {
+    "@repo/typescript-config": "*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
