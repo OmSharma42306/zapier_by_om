@@ -5,7 +5,7 @@ import { oauth2Client,getAuthUrl} from "./oauthClient";
 
 
 const app = express();
-const PORT = 3000;
+const PORT = 3003;
 
 app.use(bodyParser.json());
 
@@ -29,11 +29,12 @@ app.get('/oauth2callback', async (req, res) => {
 });
 
 // STEP 3: Trigger endpoint (Zapier-style)
-app.post('/trigger', async (req, res) => {
+app.post('/google-docs/append-text', async (req, res) => {
   const { documentId, text } = req.body;
 
-const tokens = tokenss;
+  const tokens = tokenss;
   console.log("token at trigger",tokens);
+  
   if (!tokens) return res.status(403).send('User not authorized.');
   
   oauth2Client.setCredentials(tokens);
