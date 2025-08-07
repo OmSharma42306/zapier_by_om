@@ -88,16 +88,10 @@ export default function(){
                 <DarkButton onClick={()=>{
                     router.push("/zap/create")
                 }}>Create</DarkButton>
-                 <DarkButton onClick={()=>{
-                    setModal(true);
-                }}>Open</DarkButton>
+                 
             </div>
         </div> 
-        <div className="min-h-screen flex items-center justify-center">
-            {
-                modal ?  <ServicesModal /> : "Loading"
-            }
-        </div>
+        
         </div>
         {
         loading ? "Loading...":<div className="flex justify-center"><ZapTable zaps={zaps}/></div>
