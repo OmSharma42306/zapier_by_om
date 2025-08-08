@@ -2,7 +2,6 @@
 import { Appbar } from "@/components/Appbar";
 import { DarkButton } from "@/components/buttons/DarkButton";
 import { LinkButton } from "@/components/buttons/LinkButton";
-import ServicesModal from '@/components/ServiceModal';
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

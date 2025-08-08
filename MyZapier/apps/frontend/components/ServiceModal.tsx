@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
-
+import WebhookSetup from "./WebHookSetup";
 const topApps = [
   { name: 'Gmail', icon: '📧' },
   { name: 'Google Sheets', icon: '📊' },
@@ -39,6 +39,7 @@ const zapierProducts = [
 
 export default function ServicesModal({name}:any) {
   const [open, setOpen] = useState(false);
+  const [openWebHook,setOpenWebhook ] = useState(false);
   
   return (
     <>
@@ -80,11 +81,10 @@ export default function ServicesModal({name}:any) {
 
               <div>
                 <h2 className="text-lg font-semibold mb-2">Popular built-in tools</h2>
-                <ul className="space-y-2 mb-6">
-                  {builtInTools.map((tool) => (
-                    <li key={tool} className="text-gray-700">{tool}</li>
-                  ))}
+                <ul className="space-y-2 mb-6" onClick={()=>{setOpenWebhook(true),setOpen(false)}}>
+                  Webhooks
                 </ul>
+                
 
                 <h2 className="text-lg font-semibold mb-2">Zapier products</h2>
                 <ul className="space-y-2">
@@ -96,7 +96,9 @@ export default function ServicesModal({name}:any) {
             </div>
           </div>
         </div>
+        
       )}
+      
     </>
   );
 }

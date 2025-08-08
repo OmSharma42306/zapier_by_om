@@ -4,6 +4,7 @@ import { ZapCell } from "@/components/ZapCell";
 import { useState } from "react";
 import { PrimaryButton } from "@/components/buttons/PrimaryButton";
 import ServicesModal from "@/components/ServiceModal";
+import WebhookSetup from "@/components/WebHookSetup";
 
 interface Action{
     avilableActionId : string;
