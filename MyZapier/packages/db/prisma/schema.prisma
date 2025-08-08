@@ -74,6 +74,8 @@ model ZapRuns{
   metadata Json
   zap Zap @relation(fields: [zapId],references: [id])
   zapRunOutbox ZapRunOutbox?
+  index Int @unique    // to maintain which type of trigger or action needs to run.
+  // index : 1
 }
 
 model ZapRunOutbox{
