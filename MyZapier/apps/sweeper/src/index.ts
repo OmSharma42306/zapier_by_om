@@ -2,10 +2,12 @@
 import { prismaClient as client } from "@repo/db/client";
 // import {prismaClient as client } from "@repo/db/src/index";
 
-import { Queue } from "bullmq";
+// import { Queue } from "bullmq";
 
-// BullMq stuff
-const myQueue = new Queue('sweeper');
+// // BullMq stuff
+// const myQueue = new Queue('sweeper');
+
+import { myQueue } from "./queue";
 
 async function runSweeper(){
     
@@ -43,3 +45,4 @@ async function runSweeper(){
 }
 
 runSweeper();
+export {myQueue};
