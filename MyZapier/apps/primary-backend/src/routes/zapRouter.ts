@@ -1,9 +1,7 @@
 import { Router } from "express";
 import authMiddleware from "../middleware/middleware";
-//@ts-ignore
-import {zapCreateSchema} from "@repo/common/validation"
-// @ts-ignore
-import {prismaClient as client} from "@repo/db/client";
+import {zapCreateSchema} from "@repo/common"
+import {prismaClient as client} from "@repo/db";
 
 const router = Router();
 

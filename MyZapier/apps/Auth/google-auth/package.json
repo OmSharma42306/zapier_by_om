@@ -1,21 +1,12 @@
 {
-  "name": "worker",
+  "name": "google-auth",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  
-  "devDependencies": {
-    "@repo/sweeper":"*"
-    
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "axios": "^1.11.0"
-    
-  }
+  "description": ""
 }

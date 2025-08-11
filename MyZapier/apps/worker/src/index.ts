@@ -1,5 +1,5 @@
-// @ts-ignore
-import { prismaClient as client } from "@repo/db/client";
+import { prismaClient as client } from "@repo/db";
+
 // import {prismaClient as client } from "@repo/db/src/index";
 import { Worker} from "bullmq"
 import IORedis  from "ioredis"
@@ -10,12 +10,14 @@ const connection = new IORedis({maxRetriesPerRequest:null});
 
 const worker = new Worker('sweeper',async (job:any)=>{
     console.log("Job data",job.data);
+    
     const {zapId,index} = job.data;
 
-    const zapRuns = await client.zapRuns.findFirst({
+    const zapRuns : any = await client.zapRuns.findFirst({
         where: {zapId,index}
     });
 
+    
     console.log("pre data",zapRuns);
     
     // data format!

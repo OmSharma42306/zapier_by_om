@@ -1,10 +1,11 @@
 import {Router} from "express"
-// @ts-ignore
-import {prismaClient as client} from "@repo/db/client";
+import {prismaClient as client} from "@repo/db";
+
 import authMiddleware from "../middleware/middleware";
 
 const JWT_SECRET : string | any = process.env.JWT_SECRET;
 const router = Router();
+
 
 router.get('/get-avilable-actions',async(req:any,res:any)=>{
     console.log("oh my god actions!")

@@ -1,6 +1,4 @@
-// @ts-ignore
-import { prismaClient as client } from "@repo/db/client";
-// import {prismaClient as client } from "@repo/db/src/index";
+import { prismaClient as client } from "@repo/db";
 import { myQueue } from "./queue";
 
 

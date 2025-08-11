@@ -9,9 +9,11 @@ const app = express();
 app.post("/hooks/catch/:userId/:zapId",async (req,res)=>{
     const userId = req.params.userId;
     const zapId = req.params.zapId;
+    const text = req.body.text;
     const f = req.body;
+    const documentId = req.body.documentId;
     console.log("f",f);
-    const body = "xx";
+    const body =  { "type":"Action" ,"appName":"Google Docs","operation":"Append Text","text":text,"documentId":documentId };
     
     // add zapRun and add ZapRunOutbox info to database using transaction.
     console.log("i am hit",userId,zapId,body);
@@ -31,7 +33,7 @@ app.post("/hooks/catch/:userId/:zapId",async (req,res)=>{
 
     })
 
-    // add process to kafka.
+    
 
 
 })

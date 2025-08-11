@@ -1,11 +1,9 @@
 import {Router} from "express"
 import bcrypt from "bcrypt"
-// @ts-ignore
-import {prismaClient as client} from "@repo/db/client";
+import {prismaClient as client} from "@repo/db";
 import jwt from "jsonwebtoken";
 import authMiddleware from "../middleware/middleware";
-//@ts-ignore
-import {signInSchema,signUpSchema} from "@repo/common/validation"
+import {signInSchema,signUpSchema} from "@repo/common"
 import dotenv from "dotenv"
 
 dotenv.config();
