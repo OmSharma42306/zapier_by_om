@@ -1,8 +1,7 @@
 // @ts-ignore
 import { prismaClient as client } from "@repo/db/client";
 // import {prismaClient as client } from "@repo/db/src/index";
-import { Worker } from "bullmq"
-
+import { Worker} from "bullmq"
 import IORedis  from "ioredis"
 import axios from "axios";
 
@@ -11,23 +10,36 @@ const connection = new IORedis({maxRetriesPerRequest:null});
 
 const worker = new Worker('sweeper',async (job:any)=>{
     console.log("Job data",job.data);
-    const zapRuns = await client.zapRuns.findFirst({where:{
-        id : job.data.zapId
-    }});
+    const {zapId,index} = job.data;
+
+    const zapRuns = await client.zapRuns.findFirst({
+        where: {zapId,index}
+    });
+
     console.log("pre data",zapRuns);
     
     // data format!
-    // let data =    {
-    //     id: '9a25be3d-1a19-41a4-a0b0-e6a7bffad15f',
-    //     zapId: '95944fa1-2d1a-4195-a12e-8a74d002cec7',
-    //     metadata: { type: 'Action', appName: 'Google Docs', operation: 'Append Text',text : "",documentId : "" }
-    // }
-
-    let metaDataType = zapRuns.metadata.type;
-    let appName = zapRuns.metadata.appName;
-    let operationType = zapRuns.metadata.operation;
-    let text = zapRuns.metadata.text;
-    let documentId = zapRuns.metadata.documentId;
+//    {
+//   id: '3d8b3e83-aee5-48bb-b602-b2bba9afc7b6',
+//   zapId: '29dd7a7d-7fc7-4579-86b9-e475da367822',
+//   metadata: {
+//     text: 'Tere Bina Tere Bina Beswadi Ye duniya',
+//     type: 'Action',
+//     appName: 'Google Docs',
+//     operation: 'Append Text',
+//     documentId: '1G6sDTT57pQe4aFjukIjIJhtMnyV4JEbKFbTKPkooyc0'
+//   },
+//   index: 1
+// }
+    
+    let zapRunsId = zapRuns.id;
+    let metadata = zapRuns.metadata;
+    let zapRunIndex = zapRuns.index;
+    let metaDataType = metadata.type;
+    let appName = metadata.appName;
+    let operationType = metadata.operation;
+    let text = metadata.text;
+    let documentId = metadata.documentId;
 
     if(metaDataType === 'Action'){
         
@@ -45,20 +57,9 @@ const worker = new Worker('sweeper',async (job:any)=>{
     console.log("operationType Type: ",operationType);
     console.log("text Type: ",text);
     console.log("documentId Type: ",documentId);
+    console.log("index",index);
 
 
     
 },{connection})
 
-
-
-async function main(){
-    
- 
-    
-
-}
-    
-
-
-main();
