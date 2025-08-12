@@ -21,6 +21,7 @@ model User{
   email String
   password String
   zap Zap[]
+  googleAuth GoogleAuth[]
 }
 
 model Zap{
@@ -82,4 +83,17 @@ model ZapRunOutbox{
   id String @id @default(uuid())
   zapRunId String @unique
   zapRun ZapRuns @relation(fields: [zapRunId],references: [id])
+}
+
+model GoogleAuth{
+  id String @id @default(uuid())
+  userId Int 
+  provider String
+  accessToken String
+  refreshToken String
+  scope String?
+  expiryDate DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId],references: [id])
 }
