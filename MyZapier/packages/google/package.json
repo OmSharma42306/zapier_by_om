@@ -1,0 +1,27 @@
+{
+  "name": "@repo/google",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "commonjs",
+  "module": "commonjs",
+  "exports":{
+    ".":{
+      "types": "./dist/index.d.ts",
+      "default":"./dist/index.js" 
+    }
+  },
+  "dependencies": {
+    "googleapis": "^155.0.0"
+  },
+  "devDependencies": {
+    "@repo/db":"*"
+  },
+  "scripts": {
+    "build":"tsc -b"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
