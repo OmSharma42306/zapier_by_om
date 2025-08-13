@@ -2,7 +2,7 @@ import { prismaClient as client } from "@repo/db";
 import { Worker} from "bullmq"
 import IORedis  from "ioredis"
 import axios from "axios";
-import { appendToGoogleDocs } from "@repo/google";
+import {appendToGoogleDocs } from "@repo/google"
 
 const connection = new IORedis({maxRetriesPerRequest:null});
 
@@ -16,12 +16,13 @@ const worker = new Worker('sweeper',async (job:any)=>{
         where: {zapId,index}
     });
 
-    const userId : any = await client.zap.findFirst({
+    const userIdOfZap : any = await client.zap.findFirst({
         select:{userId:true},
         where:{id : zapId}}
     );
 
-    
+     const userId = userIdOfZap.userID;
+    console.log("user ID **************",userId)
     console.log("pre data",zapRuns);
     
     // data format!
@@ -50,7 +51,7 @@ const worker = new Worker('sweeper',async (job:any)=>{
     if(metaDataType === 'Action'){
         
         if(appName === 'Google Docs'){
-            
+            console.log('i am under the if condition******************')
             // const response = await axios.post('http://localhost:3003/google-docs/append-text',{
             //     documentId,text
             // });
