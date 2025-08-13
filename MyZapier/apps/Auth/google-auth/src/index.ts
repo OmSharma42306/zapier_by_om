@@ -42,7 +42,8 @@ const userId = 1;
         refreshToken : tokens.refresh_token,
         scope : tokens.scope,
         provider : "GoogleAuth",
-        expiryDate:tokens.expiry_date ? new Date(tokens.expiry_date):null
+        expiryDate:tokens.expiry_date ? new Date(tokens.expiry_date):null,
+        allTokens : JSON.stringify(tokens)
     }
   });
 

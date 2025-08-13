@@ -92,6 +92,7 @@ model GoogleAuth{
   accessToken String
   refreshToken String
   scope String?
+  allTokens Json
   expiryDate DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
