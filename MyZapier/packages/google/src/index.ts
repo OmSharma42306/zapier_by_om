@@ -1,12 +1,21 @@
 import { oauth2Client } from "./oauthClient";
 import { google } from "googleapis";
 import { prismaClient as client } from "@repo/db"
+import { json } from "stream/consumers";
 
 export async function appendToGoogleDocs(userId : any,documentId : any,text : any){
     
-  const googleAuth = await client.user.findFirst({select:{googleAuth:true},where:{id : userId}});
+  const googleAuth : any = await client.user.findFirst({select:{googleAuth:true},where:{id : userId}});
+  console.log("hello");
   console.log("google Auth Tojjens",googleAuth);
-  const googleAuthToken = "";
+  if(!googleAuth) return;
+  let googleAuthToken ;
+  googleAuth.googleAuth.map((g:any)=>{
+      googleAuthToken =JSON.parse(g.allTokens) ;
+      console.log("htt",JSON.parse(g.allTokens));
+      console.log("set successfully");
+  })
+  
     console.log("token at trigger",googleAuthToken);
         
     if (!googleAuthToken) return;

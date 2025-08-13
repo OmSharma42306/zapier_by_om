@@ -3,8 +3,9 @@ import { google } from "googleapis";
 
 export async function appendToGoogleDocs(tokens : any,documentId : any,text : any){
     const googleAuthToken = tokens;
+    console.log("hi");
     console.log("token at trigger",googleAuthToken);
-        
+    
     if (!googleAuthToken) return;
   
     oauth2Client.setCredentials(tokens);
