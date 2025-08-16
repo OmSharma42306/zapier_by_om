@@ -49,6 +49,7 @@ model Avilabletriggers{
   id String @id @default(uuid())
   triggerName String
   triggers Trigger[]
+  triggerIcon String
 }
 
 
@@ -66,6 +67,7 @@ model AvilableActions{
   id String @id @default(uuid())
   actionName String
   actions Action[]
+  actionIcon String
 
 }
 
