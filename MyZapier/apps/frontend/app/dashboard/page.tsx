@@ -6,6 +6,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import Apps from "@/components/Apps"
+
 interface Zap{
     id : string;
     triggerId : string;
@@ -90,6 +92,7 @@ export default function(){
                  
             </div>
         </div> 
+        <Apps></Apps>
         
         </div>
         {
