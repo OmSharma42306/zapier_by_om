@@ -10,6 +10,7 @@ interface CellData {
   description: string;
   isTrigger?: boolean;
   tool?: string;
+  iconUrl?: string;
 }
 
 export default function Home() {
@@ -24,9 +25,10 @@ export default function Home() {
       description: "Choose an action to perform when the trigger fires.",
     },]);
 
-     const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [modalType, setModalType] = useState<"trigger" | "action">("action");
+  
 
     function handleAddCell(position:number){
         const newCell : CellData = {
@@ -40,11 +42,12 @@ export default function Home() {
         setCells(updated)
     }
     
-    const handleToolSelect = (tool: { id: string; name: string }) => {
+    const handleToolSelect = (tool: { id: string; name: string, icon : string }) => {
     if (selectedIndex !== null) {
       const updated = [...cells];
       updated[selectedIndex].tool = tool.name;
       updated[selectedIndex].title = tool.name;
+      updated[selectedIndex].iconUrl = tool.icon;
       setCells(updated);
     }
   };
@@ -68,6 +71,7 @@ export default function Home() {
                         setModalOpen(true)
                         setModalType(cell.isTrigger ? "trigger" : "action");
                     }}
+                    iconUrl={cell.iconUrl}
                     />
             ))}
 

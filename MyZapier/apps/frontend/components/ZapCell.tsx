@@ -8,9 +8,10 @@ interface ZapCellProps {
   isTrigger?: boolean;
   onAdd: () => void;
   onSelectTool: () => void;
+  iconUrl?: string; 
 }
 
-const ZapCell: React.FC<ZapCellProps> = ({ index, title, description, isTrigger,onAdd ,onSelectTool}) => {
+const ZapCell: React.FC<ZapCellProps> = ({ index, title, description, isTrigger,onAdd ,onSelectTool,  iconUrl,}) => {
   return (
     <div className="flex flex-col items-center">
       <div className="border border-dotted border-gray-400 rounded-lg p-4 w-80 bg-white">
@@ -18,6 +19,15 @@ const ZapCell: React.FC<ZapCellProps> = ({ index, title, description, isTrigger,
           <span onClick={onSelectTool} className="bg-gray-100 px-2 py-0.5 rounded-md text-sm font-semibold border border-gray-300">
             {isTrigger ? "⚡ Trigger" : "⚡ Action"}
           </span>
+          
+          {/* App Icon */}
+          {iconUrl && (
+            <img
+              src={iconUrl}
+              alt="App Icon"
+              className="w-6 h-6 rounded-md border border-gray-200"
+            />
+          )}
         </div>
         <p className="font-semibold text-lg">{index}. {title}</p>
         <p className="text-gray-600 text-sm mt-1">{description}</p>
