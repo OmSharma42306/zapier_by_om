@@ -6,6 +6,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+
+
+
+
+
+
 interface Zap{
     id : string;
     triggerId : string;
@@ -39,9 +45,13 @@ interface Zap{
 function useZaps(){
     const [loading,setLoading] = useState<boolean>(true);
     const [zaps,setZaps] = useState<Zap[]>([]);
-
+    const navigate = useRouter();
+    // token stuff
+const tokens = localStorage.getItem("token");
+   
     useEffect(()=>{
         async function main(){
+            if(!tokens) return;
             const response = await axios.get('http://localhost:5000/api/v1/zap/get-all-zaps',{
                 headers:{
                     Authorization:`Bearer ${localStorage.getItem("token")}`
@@ -58,7 +68,12 @@ function useZaps(){
         }
         main();
     },[]);
-
+    useEffect(()=>{
+          if(!tokens){
+        navigate.push('/login')
+    }
+    },[tokens,navigate])
+  
     return {
         loading,
         zaps
