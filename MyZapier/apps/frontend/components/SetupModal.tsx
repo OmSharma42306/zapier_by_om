@@ -1,0 +1,86 @@
+import { useState } from "react";
+
+interface SetupModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  tool: { id: string; name: string; icon: string } | null;
+  onSave: (config: Record<string, any>) => void;
+}
+
+export default function SetupModal({ isOpen, onClose, tool, onSave }: SetupModalProps) {
+  const [formData, setFormData] = useState<Record<string, any>>({});
+
+  if (!isOpen || !tool) return null;
+
+  const handleChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = () => {
+    onSave(formData);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="bg-white rounded-xl shadow-lg w-[600px] p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b pb-3 mb-4">
+          <div className="flex items-center gap-2">
+            <img src={tool.icon} alt={tool.name} className="w-6 h-6" />
+            <h2 className="text-lg font-bold">{tool.name} Setup</h2>
+          </div>
+          <button onClick={onClose} className="text-gray-500 hover:text-black">✕</button>
+        </div>
+
+        {/* Example form (different per tool) */}
+        {tool.name === "WebHook" && (
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-semibold">Trigger Event</label>
+              <select
+                className="w-full border rounded p-2"
+                onChange={(e) => handleChange("triggerEvent", e.target.value)}
+              >
+                <option value="catchRawHook">Catch Raw Hook</option>
+                <option value="catchHook">Catch Hook</option>
+              </select>
+            </div>
+          </div>
+        )}
+
+        {tool.name === "Gmail" && (
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-semibold">Recipient Email</label>
+              <input
+                type="email"
+                className="w-full border rounded p-2"
+                onChange={(e) => handleChange("recipient", e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold">Subject</label>
+              <input
+                type="text"
+                className="w-full border rounded p-2"
+                onChange={(e) => handleChange("subject", e.target.value)}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Save Button */}
+        <div className="mt-6 flex justify-end gap-3">
+          <button onClick={onClose} className="px-4 py-2 rounded border">Cancel</button>
+          <button
+            onClick={handleSave}
+            className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700"
+          >
+            Save & Continue
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -4,6 +4,7 @@ import ZapCell from "@/components/ZapCell"
 import {Appbar} from "@/components/Appbar"
 import { useState } from "react";
 import ToolPickerModal from "@/components/ToolPickerModal";
+import SetupModal from "@/components/SetupModal";
 
 interface CellData {
   title: string;
@@ -28,6 +29,9 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [modalType, setModalType] = useState<"trigger" | "action">("action");
+  // adding state for setup a tool ex : webhook or gmail 
+  const [ setupOpen,setSetUpOpen] = useState(false);
+  const [setupTool,setSetUpTool] = useState<any>(null);
   
 
     function handleAddCell(position:number){
@@ -49,6 +53,10 @@ export default function Home() {
       updated[selectedIndex].title = tool.name;
       updated[selectedIndex].iconUrl = tool.icon;
       setCells(updated);
+
+      // open setup modal
+      setSetUpTool(tool);
+      setSetUpOpen(true);
     }
   };
 
@@ -81,6 +89,21 @@ export default function Home() {
             onClose={()=>setModalOpen(false)}
             onSelect={handleToolSelect}
             />
+
+
+            {/* Setup Modal (step 2: configure chosen tool) */}
+        <SetupModal
+          isOpen={setupOpen}
+          tool={setupTool}
+          onClose={() => setSetUpOpen(false)}
+          onSave={(config) => {
+            if (selectedIndex !== null) {
+              const updated = [...cells];
+              updated[selectedIndex].config = config; // store setup config inside cell
+              setCells(updated);
+            }
+          }}
+        />
 
     </div>
     </>
