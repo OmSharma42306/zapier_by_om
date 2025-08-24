@@ -1,4 +1,4 @@
-import {Router} from "express"
+import {Request, Response, Router} from "express"
 import {prismaClient as client} from "@repo/db";
 import authMiddleware from "../middleware/middleware";
 
@@ -18,6 +18,20 @@ router.get('/get-avilable-triggers',async(req:any,res:any)=>{
         res.status(400).json({error});
     }
 });
+
+
+router.get('/get-webhooks-data',async(req:Request,res:Response)=>{
+    // const userID = req.userID
+
+    try{
+        const webHooksRecords = await client.zapRuns.findMany({ where : {} });
+        return res.status(200).json({webHooksRecords});
+    }catch(error){
+        res.status(400).json({error});
+        return;
+    }
+
+})
 
 
 
