@@ -1,11 +1,10 @@
 import { prismaClient as client } from "@repo/db";
 import { Worker} from "bullmq"
 import IORedis  from "ioredis"
-import axios from "axios";
-import {appendToGoogleDocs } from "@repo/google"
+import { GOOGLE_DOCS } from "@repo/google"
 
 const connection = new IORedis({maxRetriesPerRequest:null});
-
+const { GOOGLE_DOCS_ACTIONS } = GOOGLE_DOCS;
 
 const worker = new Worker('sweeper',async (job:any)=>{
     console.log("Job data",job.data);
@@ -51,13 +50,8 @@ const worker = new Worker('sweeper',async (job:any)=>{
     if(metaDataType === 'Action'){
         
         if(appName === 'Google Docs'){
-            console.log('i am under the if condition******************')
-            // const response = await axios.post('http://localhost:3003/google-docs/append-text',{
-            //     documentId,text
-            // });
-
             // call append text.
-            await appendToGoogleDocs(userId,documentId,text);
+            await GOOGLE_DOCS_ACTIONS.appendToGoogleDocs(userId,documentId,text);
             // console.log(response.data);
         }
     }
