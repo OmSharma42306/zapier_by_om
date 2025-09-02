@@ -7,9 +7,7 @@ const token = localStorage.getItem('token');
 export const Appbar = () =>{
 
     const router = useRouter();
-    if(!token){
-        router.push('/login')
-    }
+
     if(token){
         
         return <div className="flex border-b justify-between p-4">
@@ -29,6 +27,8 @@ export const Appbar = () =>{
     <LinkButton onClick={()=>{
 
         localStorage.removeItem('token');
+        router.push('/login')
+    
     }}>Logout</LinkButton>
     </div>
     </div>

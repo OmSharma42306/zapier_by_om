@@ -69,6 +69,7 @@
 
 
 import { useEffect, useState } from "react";
+import { getAvilableActions,getAvilableTriggers} from "../api/api"
 
 interface Tool {
   id: string;
@@ -98,10 +99,11 @@ export default function ToolPickerModal({ isOpen, type, onClose, onSelect }: Too
             : "http://localhost:5000/api/v1/action/get-avilable-actions";
 
         const res = await fetch(url);
-        const data = await res.json();
+        const data = await res.json();  
+     
 
         const list = type === "trigger" ? data.avilableTriggers : data.avilableActions;
-
+        
         setTools(
           list.map((t: any) => ({
             id: t.id,
