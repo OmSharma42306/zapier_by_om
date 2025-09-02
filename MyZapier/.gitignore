@@ -38,5 +38,12 @@ yarn-error.log*
 *.pem
 
 
+# Some Unwanted Directories
+test
+
+# TypeScript build cache
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
 # prisma 
 /generated/prisma
