@@ -1,14 +1,15 @@
 import { google,drive_v3 } from "googleapis";
 
+
 // todo : add type for res in all functions.
 
 /**
  * Initialize Google Drive API client with an existing OAuth token
  */
 
-export function getDriveClient(accessToken : string): drive_v3.Drive{
+export function getDriveClient(accessToken : string,refresh_token : string): drive_v3.Drive{
     const auth = new google.auth.OAuth2();
-    auth.setCredentials({access_token : accessToken});
+    auth.setCredentials({access_token : accessToken,refresh_token : refresh_token });
     return google.drive({ version : "v3",auth})
 }
 
