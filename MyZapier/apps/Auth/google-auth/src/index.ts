@@ -28,7 +28,7 @@ app.get('/oauth2callback', async (req:AuthRequest | any , res:Response) => {
   const { code } = req.query ;
 
 //   const userId = req.userId;
-const userId = 1;
+const userId = 2;
 
   const { tokens } : any = await oauth2Client.getToken(code as any);
   oauth2Client.setCredentials(tokens);
