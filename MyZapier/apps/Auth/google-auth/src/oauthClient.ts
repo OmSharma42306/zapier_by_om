@@ -6,7 +6,8 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 
-const SCOPES = ['https://www.googleapis.com/auth/documents'];
+const SCOPES = ['https://www.googleapis.com/auth/documents',"https://www.googleapis.com/auth/drive.metadata.readonly",
+  "https://www.googleapis.com/auth/drive.readonly"];
 
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,
