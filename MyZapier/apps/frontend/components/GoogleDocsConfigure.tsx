@@ -25,7 +25,9 @@ export default function GoogleDocsConfigure() {
       setDrives(data.drives || []);
       setFolders(data.folders || []);
       setDocs(data.docsAndSheets || []);
+    console.log(data);
     }
+    
     loadData();
   }, []);
 
@@ -167,7 +169,7 @@ export default function GoogleDocsConfigure() {
         </div>
       </div>
 
-      {/* Footer */}
+      {/* Footer
       <div className="px-4 py-3 border-t">
         <button
           disabled={!isFormValid}
@@ -178,8 +180,8 @@ export default function GoogleDocsConfigure() {
           }`}
         >
           {isFormValid ? "Continue" : "To continue, finish required fields"}
-        </button>
-      </div>
+        </button> */}
+      {/* </div> */}
     </div>
   );
 }
