@@ -1,4 +1,5 @@
 import { useState } from "react";
+import WebhookListening from "./WebHookListening";
 
 interface SetupModalProps {
   isOpen: boolean;
@@ -7,13 +8,19 @@ interface SetupModalProps {
   onSave: (config: Record<string, any>) => void;
 }
 
-export default function SetupModal({ isOpen, onClose, tool, onSave }: SetupModalProps) {
+export default function SetupModal({
+  isOpen,
+  onClose,
+  tool,
+  onSave,
+}: SetupModalProps) {
   const [formData, setFormData] = useState<Record<string, any>>({});
-
+  const [webhookSet, setWebHookSet] = useState(false);
+  console.log(webhookSet);
   if (!isOpen || !tool) return null;
 
   const handleChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSave = () => {
@@ -30,7 +37,9 @@ export default function SetupModal({ isOpen, onClose, tool, onSave }: SetupModal
             <img src={tool.icon} alt={tool.name} className="w-6 h-6" />
             <h2 className="text-lg font-bold">{tool.name} Setup</h2>
           </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-black">✕</button>
+          <button onClick={onClose} className="text-gray-500 hover:text-black">
+            ✕
+          </button>
         </div>
 
         {/* Example form (different per tool) */}
@@ -40,11 +49,23 @@ export default function SetupModal({ isOpen, onClose, tool, onSave }: SetupModal
               <label className="text-sm font-semibold">Trigger Event</label>
               <select
                 className="w-full border rounded p-2"
-                onChange={(e) => handleChange("triggerEvent", e.target.value)}
+                onChange={(e) => {
+                  handleChange("triggerEvent", e.target.value);
+                  console.log(e.target.value);
+                  if (e.target.value === "catchRawHook") {
+                    console.log(e.target.value);
+                    setWebHookSet(true);
+                  }
+                }}
               >
                 <option value="catchRawHook">Catch Raw Hook</option>
                 <option value="catchHook">Catch Hook</option>
               </select>
+              {webhookSet && (
+                <div className="mt-4">
+                  <WebhookListening />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -72,7 +93,9 @@ export default function SetupModal({ isOpen, onClose, tool, onSave }: SetupModal
 
         {/* Save Button */}
         <div className="mt-6 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 rounded border">Cancel</button>
+          <button onClick={onClose} className="px-4 py-2 rounded border">
+            Cancel
+          </button>
           <button
             onClick={handleSave}
             className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700"
