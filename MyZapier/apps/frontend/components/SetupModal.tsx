@@ -18,7 +18,7 @@ export default function SetupModal({
   const [webhookSet, setWebHookSet] = useState(false);
   console.log(webhookSet);
   if (!isOpen || !tool) return null;
-
+  console.log(tool);
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -68,6 +68,30 @@ export default function SetupModal({
               )}
             </div>
           </div>
+        )}
+
+        {tool.name === "Google Docs" && (
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-semibold">Google Docs Events</label>
+              <select
+                className="w-full border rounded p-2"
+                onChange={(e) => {
+                  handleChange("triggerEvent", e.target.value);
+                  console.log(e.target.value);
+                }}
+              >
+                <option value="catchRawHook">Append Text To Docs</option>
+                {/* <option value="catchHook">Catch Hook</option> */}
+              </select>
+              {/* {webhookSet && (
+                <div className="mt-4">
+                  <WebhookListening />
+                </div>
+              )} */}
+            </div>
+          </div>
+          
         )}
 
         {tool.name === "Gmail" && (
