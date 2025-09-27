@@ -26,7 +26,7 @@ export const Hero = () =>{
             }}>Get Started free</PrimaryButton>
             <div className="pl-4">
             <SecondaryButton size="big" onClick={()=>{
-                router.push()
+                router.push("/contact")
             }}>Contact Sales</SecondaryButton>
             </div>
         </div>
