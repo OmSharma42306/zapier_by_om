@@ -1,5 +1,6 @@
 import { useState } from "react";
 import WebhookListening from "./WebHookListening";
+import GoogleDocsConfigure from "./GoogleDocsConfigure";
 
 interface SetupModalProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ export default function SetupModal({
 }: SetupModalProps) {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [webhookSet, setWebHookSet] = useState(false);
+  const [googleDocsEvent,setGoogleDocsEvent] = useState('');
   console.log(webhookSet);
   if (!isOpen || !tool) return null;
   console.log(tool);
@@ -79,16 +81,20 @@ export default function SetupModal({
                 onChange={(e) => {
                   handleChange("triggerEvent", e.target.value);
                   console.log(e.target.value);
+                  if(e.target.value){
+                    setGoogleDocsEvent("appendtodocs")
+                  }
                 }}
               >
-                <option value="catchRawHook">Append Text To Docs</option>
+                <option value="appendtodocs">Append Text To Docs</option>
+                <option value="appendtodocs">Append </option>
                 {/* <option value="catchHook">Catch Hook</option> */}
               </select>
-              {/* {webhookSet && (
+              {googleDocsEvent&& (
                 <div className="mt-4">
-                  <WebhookListening />
+                  <GoogleDocsConfigure />
                 </div>
-              )} */}
+              )}
             </div>
           </div>
           
