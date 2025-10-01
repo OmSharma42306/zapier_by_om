@@ -10,7 +10,6 @@
   },
   "devDependencies": {
     "@repo/db": "*",
-    "@repo/gg":"*",
     "@repo/google":"*",
     "@types/node": "^24.2.0",
     "prettier": "^3.6.2",
