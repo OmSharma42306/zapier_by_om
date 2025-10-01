@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getGoogleData } from "../api/api"
 
 type Drive = { id: string; name: string };
 type Folder = { id: string; name: string; parents?: string[] };
@@ -19,16 +20,15 @@ export default function GoogleDocsConfigure() {
 
   // Fetch data from API
   useEffect(() => {
-    async function loadData() {
-      const res = await fetch("http://localhost:5000/api/v1/googleData/getGoogleDataInfo");
-      const data = await res.json();
+    async function loadGoogleData() {
+      const data = await getGoogleData();
       setDrives(data.drives || []);
       setFolders(data.folders || []);
       setDocs(data.docsAndSheets || []);
     console.log(data);
     }
     
-    loadData();
+    loadGoogleData();
   }, []);
 
   // Filter docs based on folder if selected
