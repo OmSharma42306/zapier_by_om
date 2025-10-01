@@ -11,3 +11,11 @@ export async function getAvilableActions(){
     console.log(response.data);
     return response;
 }
+
+export async function getGoogleData(){
+    const response = await axios.get("http://localhost:5000/api/v1/googleData/getGoogleDataInfo");
+    const datas = await response.data;
+    const data = datas.msg;
+    console.log("k",data);
+    return data;
+}
