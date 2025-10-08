@@ -71,11 +71,15 @@ export default function GoogleDocsConfigure() {
           className="w-6 h-6"
         />
         <Link
+          legacyBehavior
+          passHref
           href="http://localhost:3003/auth"
           className="flex items-center gap-2 px-4 py-2 border rounded-md bg-white text-gray-700 hover:bg-gray-50 transition shadow-sm"
           title="Google Auth"
         >
+          <a target="_blank">
           Sign in with Google
+          </a>
         </Link>
       </div>
 

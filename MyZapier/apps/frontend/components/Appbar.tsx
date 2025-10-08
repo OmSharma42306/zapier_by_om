@@ -2,11 +2,18 @@
 import { useRouter } from "next/navigation";
 import { LinkButton } from "./buttons/LinkButton";
 import { PrimaryButton } from "./buttons/PrimaryButton";
-const token = localStorage.getItem('token');
+import { useEffect, useState } from "react";
+
 
 export const Appbar = () =>{
 
     const router = useRouter();
+    const [token , setToken ] = useState<string | null>('');
+    
+    useEffect(()=>{
+            const token : string | null = localStorage.getItem('token');        
+            setToken(token);
+    },[])
 
     if(token){
         
