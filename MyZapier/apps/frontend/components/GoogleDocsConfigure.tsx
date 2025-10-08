@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getGoogleData } from "../api/api"
+import Link from "next/link"
 
 type Drive = { id: string; name: string };
 type Folder = { id: string; name: string; parents?: string[] };
@@ -62,7 +63,23 @@ export default function GoogleDocsConfigure() {
           <button>Field search</button>
         </div>
       </div> */}
+            {/* Google Auth Section */}
+      <div className="flex items-center justify-center gap-3 mt-4 px-6">
+        <img
+          src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
+          alt="Google Icon"
+          className="w-6 h-6"
+        />
+        <Link
+          href="http://localhost:3003/auth"
+          className="flex items-center gap-2 px-4 py-2 border rounded-md bg-white text-gray-700 hover:bg-gray-50 transition shadow-sm"
+          title="Google Auth"
+        >
+          Sign in with Google
+        </Link>
+      </div>
 
+      
       {/* Content */}
       <div className="p-6 space-y-6">
         {/* Drive */}
