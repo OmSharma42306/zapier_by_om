@@ -5,13 +5,24 @@ import { Copy, Loader2 } from 'lucide-react';
 
 export default function WebhookListening() {
   const [copied, setCopied] = useState(false);
+  const [copied2, setCopied2] = useState(false);
   const webhookUrl = "https://hooks.zapier.com/hooks/catch/123456/abcdef";
+  const tempWebhookUrl = "https://localhost:3004/hooks/catch/temp/webhook"
   
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(webhookUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+  const handleCopy = async (url : string,urlType : string) => {
+    await navigator.clipboard.writeText(url);
+    if(urlType === "tempWebhookUrl"){
+       setCopied(true);
+       
+    } 
+    
+    if(urlType === "liveWebHookUrl"){
+       setCopied2(true);
+       setTimeout(() => setCopied2(false), 1500); 
+    } 
+    
+    
   };
 
   return (
@@ -25,11 +36,31 @@ export default function WebhookListening() {
       <div className="p-6 space-y-6">
         {/* Webhook URL */}
         <div>
+          <p className="text-sm font-medium mb-1">Your testing webhook URL</p>
+          <p className="text-xs text-gray-500 mb-3">
+            You’ll need to configure your application with this Zap’s webhook URL.
+          </p>
+            <div className="flex items-center border rounded-md overflow-hidden">
+            <input
+              type="text"
+              readOnly
+              value={tempWebhookUrl}
+              className="w-full px-3 py-2 text-sm bg-gray-50 outline-none"
+            />
+            <button
+              onClick={()=>handleCopy(tempWebhookUrl,"tempWebhookUrl")}
+              className="bg-gray-100 px-3 py-2 text-sm hover:bg-gray-200 flex items-center gap-1"
+            >
+              <Copy size={14} />
+              {copied ? "Copied!" : "Copy"}
+            </button>
+          </div>
           <p className="text-sm font-medium mb-1">Your webhook URL</p>
           <p className="text-xs text-gray-500 mb-3">
             You’ll need to configure your application with this Zap’s webhook URL.
           </p>
           <div className="flex items-center border rounded-md overflow-hidden">
+            
             <input
               type="text"
               readOnly
@@ -37,11 +68,11 @@ export default function WebhookListening() {
               className="w-full px-3 py-2 text-sm bg-gray-50 outline-none"
             />
             <button
-              onClick={handleCopy}
+              onClick={()=>handleCopy(webhookUrl,"liveWebHookUrl")}
               className="bg-gray-100 px-3 py-2 text-sm hover:bg-gray-200 flex items-center gap-1"
             >
               <Copy size={14} />
-              {copied ? "Copied!" : "Copy"}
+              {copied2 ? "Copied!" : "Copy"}
             </button>
           </div>
           <p className="text-xs text-gray-500 mt-2">
