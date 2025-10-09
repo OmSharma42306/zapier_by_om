@@ -28,29 +28,38 @@ app.get('/oauth2callback', async (req:AuthRequest | any , res:Response) => {
   const { code } = req.query ;
 
 //   const userId = req.userId;
-const userId = 2;
+const userId = 5;
 
   const { tokens } : any = await oauth2Client.getToken(code as any);
   oauth2Client.setCredentials(tokens);
   console.log("ToKens  : ",tokens)
   tokenss = tokens;
   
-  const googleAuthUser = await client.googleAuth.create({
-    data:{
-        userId : userId,
-        accessToken:tokens.access_token,
-        refreshToken : tokens.refresh_token,
-        scope : tokens.scope,
-        provider : "GoogleAuth",
-        expiryDate:tokens.expiry_date ? new Date(tokens.expiry_date):null,
-        allTokens : JSON.stringify(tokens)
+  // Upsert ensures that if a GoogleAuth entry exists for this user, it will be updated with the new tokens;
+  //  otherwise, a new entry will be created — this keeps exactly one record per user.
+  const googleAuthUser = await client.googleAuth.upsert({
+    where : {userId},
+    update : {
+      accessToken : tokens.access_token,
+      refreshToken : tokens.refresh_token,
+      scope : tokens.scope,
+      expiryDate : tokens.expiry_date ? new Date(tokens.expiry_date) : null,
+      allTokens : tokens
+    },
+    create :{
+      userId,
+      provider : 'GoogleAuth',
+      accessToken : tokens.access_token,
+      refreshToken : tokens.refresh_token,
+      scope : tokens.scope,
+      expiryDate : tokens.expiry_date ? new Date(tokens.expiry_date) : null,
+      allTokens : tokens
     }
-  });
-
+  })
   console.log("googleAuthUser",googleAuthUser)
   
   
-  res.send('✅ Authorization successful. You can now trigger the action.');
+  res.status(200).send('✅ Authorization successful. You can now trigger the action.');
 });
 
 
