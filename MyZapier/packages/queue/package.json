@@ -1,0 +1,27 @@
+{
+  "name": "@repo/queue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "commonjs",
+  "module": "commonjs",
+  "scripts": {
+    "dev": "tsc -b && node dist/index.js"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bullmq": "^5.61.0"
+  }
+}
