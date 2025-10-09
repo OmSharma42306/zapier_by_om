@@ -8,17 +8,23 @@ export async function appendToGoogleDocs(userId : any,documentId : any,text : an
   console.log("hello");
   console.log("google Auth Tojjens",googleAuth);
   if(!googleAuth) return;
+  console.log("hr1");
   let googleAuthToken ;
-  googleAuth.googleAuth.map((g:any)=>{
-      googleAuthToken =JSON.parse(g.allTokens) ;
-      console.log("htt",JSON.parse(g.allTokens));
-      console.log("set successfully");
-  })
-  
+  console.log("hr2");
+  // googleAuth.googleAuth.map((g:any)=>{
+  //     googleAuthToken =JSON.parse(g.allTokens) ;
+  //     console.log("htt",JSON.parse(g.allTokens));
+  //     console.log("set successfully");
+  // })
+    let googleAuthInfo = googleAuth.googleAuth[0];
+    // googleAuthToken = JSON.parse(googleAuthInfo.allTokens);
+    googleAuthToken = googleAuthInfo.allTokens;
+
+    console.log("f",googleAuthToken);
     console.log("token at trigger",googleAuthToken);
-        
+    console.log("return above")    
     if (!googleAuthToken) return;
-  
+    console.log("return below")
     oauth2Client.setCredentials(googleAuthToken);
 
   try {
