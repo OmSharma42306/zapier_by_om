@@ -90,7 +90,7 @@ model ZapRunOutbox{
 
 model GoogleAuth{
   id String @id @default(uuid())
-  userId Int 
+  userId Int @unique
   provider String
   accessToken String
   refreshToken String
