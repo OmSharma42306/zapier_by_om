@@ -1,5 +1,5 @@
 import { prismaClient as client } from "@repo/db";
-import { myQueue } from "./queue";
+import { myQueue } from "@repo/queue"
 
 async function runSweeper() {
   while (true) {

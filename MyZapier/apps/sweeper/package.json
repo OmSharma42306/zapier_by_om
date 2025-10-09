@@ -1,10 +1,7 @@
 {
-  "name": "@repo/sweeper",
+  "name": "sweeper",
   "version": "1.0.0",
   "main": "index.js",
-  "exports":{
-    "./queue":"./dist/queue.js"
-  },
   "module": "commonjs",
   "scripts": {
     "dev": "tsc -b && node dist/index.js"
@@ -14,6 +11,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "bullmq": "^5.56.9"
+    "@repo/queue": "^1.0.0"
   }
 }
