@@ -58,7 +58,7 @@ model Action{
   id String @id @default(uuid())
   actionId String
   zapId String
-  //metadata Json
+  metadata Json
   type AvilableActions @relation(fields: [actionId],references: [id])
   zap Zap @relation(fields: [zapId],references: [id])
   sortingOrder Int @default(0)
