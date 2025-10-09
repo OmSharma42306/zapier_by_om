@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import authMiddleware from "../middleware/middleware";
 import {zapCreateSchema} from "@repo/common"
 import {prismaClient as client} from "@repo/db";
@@ -21,9 +21,10 @@ router.post('/',authMiddleware,async(req:any,res:any)=>{
                 userId:id,
                 triggerId:"",
                 action:{
+                    // @ts-ignore
                     create:parsedData.data.actions.map((x:any,index:any)=>({
                         actionId:x.avilableActionId,
-                        sortingOrder:index
+                        index:index
                     }))
                 }
             }
@@ -113,6 +114,47 @@ trigger:{
     return res.status(200).json({particularZap});
 
 
+});
+
+
+
+router.post('/add-all-actions-to-zapRuns',async(req:Request,res:Response)=>{
+    try{
+        // fetch all actions with zap id 
+        const allActions = await client.action.findMany({
+            where : {zapId : '29dd7a7d-7fc7-4579-86b9-e475da367822'}
+        });
+
+        if (allActions.length === 0){
+            res.status(404).json({msg : 'No Actions Found for this ZapID'});
+            return;
+        }
+        console.log(allActions);
+        // Running a single transactions for all actions inserts.
+        // insert them per entry in zapruns and zapruns outbox
+        await client.$transaction(async (tx)=>{
+            for(const action of allActions){
+                const zapRun = await tx.zapRuns.create({
+                    data : {
+                        zapId : action.zapId,
+                        // @ts-ignore
+                        metadata : action.metadata,
+                        index : action.index
+                    }
+                });
+
+                await tx.zapRunOutbox.create({
+                    data:{
+                        zapRunId : zapRun.id
+                    }
+                });
+            }
+        })
+
+    }catch(error){
+        res.status(400).json({msg : error});
+        return;
+    }
 })
 
 
