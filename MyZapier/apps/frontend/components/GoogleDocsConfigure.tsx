@@ -8,7 +8,7 @@ type Drive = { id: string; name: string };
 type Folder = { id: string; name: string; parents?: string[] };
 type Doc = { id: string; name: string; mimeType: string; parents?: string[] };
 
-export default function GoogleDocsConfigure() {
+export default function GoogleDocsConfigure({index,toolName}:any) {
   const [drives, setDrives] = useState<Drive[]>([]);
   const [folders, setFolders] = useState<Folder[]>([]);
   const [docs, setDocs] = useState<Doc[]>([]);
@@ -18,7 +18,8 @@ export default function GoogleDocsConfigure() {
   const [selectedDoc, setSelectedDoc] = useState("");
   const [textToAppend, setTextToAppend] = useState("");
   const [appendNewLine, setAppendNewLine] = useState("true");
-
+  console.log("Index of this",index);
+  console.log("tool name",toolName);
   // Fetch data from API
   useEffect(() => {
     async function loadGoogleData() {
@@ -31,6 +32,13 @@ export default function GoogleDocsConfigure() {
     
     loadGoogleData();
   }, []);
+
+  // write an api to send action data
+  async function saveAction(){
+    // zapId,actionId,data,index....
+    // data { selectedDrive,selectedFolder,selectedDoc,textToAppend,appendNewLine }
+
+  }
 
   // Filter docs based on folder if selected
   const filteredDocs = selectedFolder
