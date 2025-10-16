@@ -67,13 +67,22 @@ export default function Home() {
         </div>
     <div className="flex flex-col items-center gap-8 p-10 bg-gray-50 min-h-screen">
             {cells.map((cell,i)=>(
+                <>
                 <ZapCell
+                
                     key={i} 
-                    index={i+1}
+                    index={i}
                     title={cell.title}
                     description={cell.description}
                     isTrigger={cell.isTrigger} 
-                    onAdd={()=>handleAddCell(i)}
+                    onAdd={()=>{
+                      // if(i == 1){
+                      //   handleAddCell(i+2)
+                      // }
+                      handleAddCell(i)
+                    }
+                      
+                      }
                     onSelectTool={()=>{
                         setSelectedIndex(i);
                         setModalOpen(true)
@@ -81,6 +90,9 @@ export default function Home() {
                     }}
                     iconUrl={cell.iconUrl}
                     />
+                    <h1>{i}</h1>
+                    </>
+                    
             ))}
 
             <ToolPickerModal
@@ -93,8 +105,10 @@ export default function Home() {
 
             {/* Setup Modal (step 2: configure chosen tool) */}
         <SetupModal
+          
           isOpen={setupOpen}
           tool={setupTool}
+          cellIndex={selectedIndex}
           onClose={() => setSetUpOpen(false)}
           onSave={(config) => {
             if (selectedIndex !== null) {

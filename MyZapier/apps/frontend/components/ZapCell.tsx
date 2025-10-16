@@ -18,7 +18,7 @@ const ZapCell: React.FC<ZapCellProps> = ({ index, title, description, isTrigger,
         <div className="flex items-center gap-2 mb-2">
           <span onClick={onSelectTool} className="bg-gray-100 px-2 py-0.5 rounded-md text-sm font-semibold border border-gray-300">
             {isTrigger ? "⚡ Trigger" : "⚡ Action"}
-          </span>
+          </span>     
           
           {/* App Icon */}
           {iconUrl && (

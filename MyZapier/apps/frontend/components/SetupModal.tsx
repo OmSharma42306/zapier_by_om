@@ -6,6 +6,7 @@ interface SetupModalProps {
   isOpen: boolean;
   onClose: () => void;
   tool: { id: string; name: string; icon: string } | null;
+  cellIndex?: number | null;  
   onSave: (config: Record<string, any>) => void;
 }
 
@@ -13,6 +14,7 @@ export default function SetupModal({
   isOpen,
   onClose,
   tool,
+  cellIndex,
   onSave,
 }: SetupModalProps) {
   const [formData, setFormData] = useState<Record<string, any>>({});
@@ -25,7 +27,10 @@ export default function SetupModal({
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  console.log(`index of cell : ${cellIndex} : ${tool.name}`,);
+
   const handleSave = () => {
+    
     onSave(formData);
     onClose();
   };
@@ -92,7 +97,8 @@ export default function SetupModal({
               </select>
               {googleDocsEvent&& (
                 <div className="mt-4">
-                  <GoogleDocsConfigure />
+                  <h1>google docs : {cellIndex}</h1>
+                  <GoogleDocsConfigure index={cellIndex} toolName={tool.name}/>
                 </div>
               )}
             </div>
