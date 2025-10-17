@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getGoogleData } from "../api/api"
+import { getGoogleData,saveActionToDB } from "../api/api"
 import Link from "next/link"
+
 
 type Drive = { id: string; name: string };
 type Folder = { id: string; name: string; parents?: string[] };
@@ -36,17 +37,19 @@ export default function GoogleDocsConfigure({index,toolsInfo,zapId}:any) {
   // write an api to send action data
   async function saveAction(){
     // zapId,actionId,data,index....
-    // data { selectedDrive,selectedFolder,selectedDoc,textToAppend,appendNewLine }
-    console.log("selected doc : ",selectedDoc);
-    console.log("text to append : ",textToAppend);
-    // zapId done
-    // {"text":"RHTDM","type":"Action","appName":"Google Docs","operation":"Append Text","documentId":"1G6sDTT57pQe4aFjukIjIJhtMnyV4JEbKFbTKPkooyc0"}
-    const data = {"text":textToAppend,"type":"Action","appName":"Google Docs","operation":"Append Text","documentId":selectedDoc};
+    
     let actionId = toolsInfo.id;
+    const data = {"text":textToAppend,"type":"Action","appName":"Google Docs","operation":"Append Text","documentId":selectedDoc};
 
+    let actionData : any = {};
+    actionData["zapId"] = zapId;
+    actionData["actionId"] = actionId;
+    actionData["metadata"] = data;
+    actionData["index"] = index;
 
-
-
+    console.log("Action Data : ",actionData);
+    const action = await saveActionToDB(actionData);
+    console.log(action);
   }
 
   // Filter docs based on folder if selected
