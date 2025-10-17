@@ -3,59 +3,86 @@ import authMiddleware from "../middleware/middleware";
 import {zapCreateSchema} from "@repo/common"
 import {prismaClient as client} from "@repo/db";
 
+interface authRequest extends Request{
+    userId? : Number;
+}
 const router = Router();
 
 
-router.post('/',authMiddleware,async(req:any,res:any)=>{
-    // create a zap
-    const id = req.userId;
+// router.post('/',authMiddleware,async(req:any,res:any)=>{
+//     // create a zap
+//     const id = req.userId;
 
-    const parsedData = zapCreateSchema.safeParse(req.body);
-    if(!parsedData.success){
-        return res.json({msg:"Invalid Inputs!"})
-    }
+//     const parsedData = zapCreateSchema.safeParse(req.body);
+//     if(!parsedData.success){
+//         return res.json({msg:"Invalid Inputs!"})
+//     }
 
-    await client.$transaction(async (tx : any)=>{
-        const zap = await client.zap .create({
-            data:{
-                userId:id,
-                triggerId:"",
-                action:{
-                    // @ts-ignore
-                    create:parsedData.data.actions.map((x:any,index:any)=>({
-                        actionId:x.avilableActionId,
-                        index:index
-                    }))
-                }
-            }
-        })
+//     await client.$transaction(async (tx : any)=>{
+//         const zap = await client.zap .create({
+//             data:{
+//                 userId:id,
+//                 triggerId:"",
+//                 action:{
+//                     // @ts-ignore
+//                     create:parsedData.data.actions.map((x:any,index:any)=>({
+//                         actionId:x.avilableActionId,
+//                         index:index
+//                     }))
+//                 }
+//             }
+//         })
 
-        const trigger = await tx.trigger.create({
-            data:{
-                triggerId : parsedData.data.avilableTriggerId,
-                zapId : zap.id
-            }
-        })
+//         const trigger = await tx.trigger.create({
+//             data:{
+//                 triggerId : parsedData.data.avilableTriggerId,
+//                 zapId : zap.id
+//             }
+//         })
 
-        await client.zap.update({
-            where:{
-                id:zap.id
-            },
-            data:{
-                triggerId:trigger.id
-            }
-        })
+//         await client.zap.update({
+//             where:{
+//                 id:zap.id
+//             },
+//             data:{
+//                 triggerId:trigger.id
+//             }
+//         })
 
-    })
+//     })
 
 
-    // const createZap = await client.zap.create({data:{
-    //     triggerId: " ",
+//     // const createZap = await client.zap.create({data:{
+//     //     triggerId: " ",
         
-    // }})
+//     // }})
     
-    res.json({msg:"done!"})
+//     res.json({msg:"done!"})
 
+// })
+
+router.post('/create-zap',authMiddleware,async(req:authRequest , res:Response)=>{
+    const userId = Number(req.userId);
+    console.log("userID : ",userId)
+    try{
+         const parsedData = zapCreateSchema.safeParse(req.body);
+        if(!parsedData.success){
+            return res.json({msg:"Invalid Inputs!"})
+        }
+        console.log(parsedData);
+        const createZap = await client.zap.create({
+            data : {
+                userId : userId,
+                triggerId : ""
+            }
+        });
+        console.log("createdZap",createZap);
+        res.status(200).json({msg : "zapCreated",zapId : createZap.id});
+        return;
+    }catch(error){
+        res.status(400).json({msg : error});
+        return;
+    }
 })
 
 router.get('/get-all-zaps',authMiddleware,async(req:any,res:any)=>{

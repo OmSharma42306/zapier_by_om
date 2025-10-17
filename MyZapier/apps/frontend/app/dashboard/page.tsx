@@ -5,12 +5,7 @@ import { LinkButton } from "@/components/buttons/LinkButton";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-
-
-
-
-
+import { createZapApi } from "@/api/api";
 
 interface Zap{
     id : string;
@@ -44,14 +39,22 @@ interface Zap{
 
 function useZaps(){
     const [loading,setLoading] = useState<boolean>(true);
-    const [zaps,setZaps] = useState<Zap[]>([]);
+    const [zaps,setZaps] = useState<Zap[] | any>([]);
+    const [token,setToken] = useState('');
     const navigate = useRouter();
-    // token stuff
-const tokens = localStorage.getItem("token");
-   
+
     useEffect(()=>{
+
+
+        // Access localStorage only on the client
+    const storedToken = localStorage.getItem("token");
+    if (!storedToken) {
+      navigate.push("/login");
+      return;
+    }
+    setToken(storedToken);
+
         async function main(){
-            if(!tokens) return;
             const response = await axios.get('http://localhost:5000/api/v1/zap/get-all-zaps',{
                 headers:{
                     Authorization:`Bearer ${localStorage.getItem("token")}`
@@ -68,11 +71,6 @@ const tokens = localStorage.getItem("token");
         }
         main();
     },[]);
-    useEffect(()=>{
-          if(!tokens){
-        navigate.push('/login')
-    }
-    },[tokens,navigate])
   
     return {
         loading,
@@ -88,6 +86,27 @@ export default function(){
     const {loading,zaps} = useZaps();
     const router = useRouter();
     const [modal,setModal] = useState(false);
+    const [token,setToken] = useState('');  
+    const [zapId,setZapId] = useState('');
+    const navigate = useRouter();
+
+    useEffect(()=>{
+        
+        // Access localStorage only on the client
+    const storedToken = localStorage.getItem("token");
+    if (!storedToken) {
+      navigate.push("/login");
+      return;
+    }
+    setToken(storedToken);
+    },[])
+
+    async function handleCreateZap(){
+        const response = await createZapApi(token);
+        setZapId(response.zapId);
+        // router.push("/zap/create")
+        router.push(`/zap/create/${response.zapId}`);
+    }
     
     return <div>
         <Appbar/>
@@ -100,7 +119,8 @@ export default function(){
                 </div>
 
                 <DarkButton onClick={()=>{
-                    router.push("/zap/create")
+                    handleCreateZap()
+                    
                 }}>Create</DarkButton>
                  
             </div>
@@ -125,15 +145,15 @@ function ZapTable({zaps}:{zaps:Zap[]}){
         <div className="flex-1">Go</div>
 
      </div>
-    {zaps.map((z:any) => <div className="flex border-b border-t py-4">
+    {zaps.map((z:any) => <div key={z.id} className="flex border-b border-t py-4">
     
-      
-        <div className="flex-1">{z.trigger.type.triggerName} {z.action.map((x:any) => x.type.actionName + " ")}</div>
-        <div className="flex-1">{z.id}</div>
+      {z.trigger ?<><div className="flex-1">{z.trigger.type.triggerName} {z.action.map((x:any) => x.type.actionName + " ")}</div>
+        
         <div className="flex-1">Nov 13, 2023</div>
         <div className="flex-1"><LinkButton onClick={()=>{
         router.push(`/zap/${z.id}`)
-        }}>Go</LinkButton></div>
+        }}>Go</LinkButton></div> </>: <div className="flex-1">{z.id}</div> }
+        
     
 
         

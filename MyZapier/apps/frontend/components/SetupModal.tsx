@@ -7,6 +7,7 @@ interface SetupModalProps {
   onClose: () => void;
   tool: { id: string; name: string; icon: string } | null;
   cellIndex?: number | null;  
+  zapId?: string | null;
   onSave: (config: Record<string, any>) => void;
 }
 
@@ -15,6 +16,7 @@ export default function SetupModal({
   onClose,
   tool,
   cellIndex,
+  zapId,
   onSave,
 }: SetupModalProps) {
   const [formData, setFormData] = useState<Record<string, any>>({});
@@ -98,7 +100,7 @@ export default function SetupModal({
               {googleDocsEvent&& (
                 <div className="mt-4">
                   <h1>google docs : {cellIndex}</h1>
-                  <GoogleDocsConfigure index={cellIndex} toolsInfo={tool}/>
+                  <GoogleDocsConfigure index={cellIndex} toolsInfo={tool} zapId= {zapId} />
                 </div>
               )}
             </div>

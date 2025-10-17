@@ -19,3 +19,16 @@ export async function getGoogleData(){
     console.log("k",data);
     return data;
 }
+
+
+// zaps environment
+
+export async function createZapApi(token : string){
+    const response = await axios.post('http://localhost:5000/api/v1/zap/create-zap',{},{
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+    });
+    console.log("dada",response.data);
+    return response.data;
+}
