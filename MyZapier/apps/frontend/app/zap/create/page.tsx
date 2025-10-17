@@ -13,7 +13,11 @@ interface CellData {
   tool?: string;
   iconUrl?: string;
 }
-
+interface ToolsData{
+  id: string;
+  name: string;
+  icon : string;
+}
 export default function Home() {
 
     const [cells,setCells] = useState<any[]>([{
@@ -31,9 +35,16 @@ export default function Home() {
   const [modalType, setModalType] = useState<"trigger" | "action">("action");
   // adding state for setup a tool ex : webhook or gmail 
   const [ setupOpen,setSetUpOpen] = useState(false);
-  const [setupTool,setSetUpTool] = useState<any>(null);
+  const [setupTool,setSetUpTool] = useState<ToolsData | null>(null);
   
 
+  console.log(setupTool)
+
+
+  const actionId = setupTool?.id;
+  const actionName = setupTool?.name;
+console.log("actionID",actionId);
+console.log("Action Name",actionName);
     function handleAddCell(position:number){
         const newCell : CellData = {
             title : "New Action",

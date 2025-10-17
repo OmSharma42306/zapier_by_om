@@ -8,7 +8,7 @@ type Drive = { id: string; name: string };
 type Folder = { id: string; name: string; parents?: string[] };
 type Doc = { id: string; name: string; mimeType: string; parents?: string[] };
 
-export default function GoogleDocsConfigure({index,toolName}:any) {
+export default function GoogleDocsConfigure({index,toolsInfo}:any) {
   const [drives, setDrives] = useState<Drive[]>([]);
   const [folders, setFolders] = useState<Folder[]>([]);
   const [docs, setDocs] = useState<Doc[]>([]);
@@ -19,7 +19,7 @@ export default function GoogleDocsConfigure({index,toolName}:any) {
   const [textToAppend, setTextToAppend] = useState("");
   const [appendNewLine, setAppendNewLine] = useState("true");
   console.log("Index of this",index);
-  console.log("tool name",toolName);
+  console.log("tool name",toolsInfo);
   // Fetch data from API
   useEffect(() => {
     async function loadGoogleData() {
@@ -37,6 +37,14 @@ export default function GoogleDocsConfigure({index,toolName}:any) {
   async function saveAction(){
     // zapId,actionId,data,index....
     // data { selectedDrive,selectedFolder,selectedDoc,textToAppend,appendNewLine }
+    console.log("selected doc : ",selectedDoc);
+    console.log("text to append : ",textToAppend);
+    // {"text":"RHTDM","type":"Action","appName":"Google Docs","operation":"Append Text","documentId":"1G6sDTT57pQe4aFjukIjIJhtMnyV4JEbKFbTKPkooyc0"}
+    const data = {"text":textToAppend,"type":"Action","appName":"Google Docs","operation":"Append Text","documentId":selectedDoc};
+    let actionId = toolsInfo.id;
+
+
+
 
   }
 
@@ -196,6 +204,10 @@ export default function GoogleDocsConfigure({index,toolName}:any) {
             </label>
           </div>
         </div>
+         <div>
+          
+          <button onClick={saveAction}>Save Data</button>
+          </div>
       </div>
 
       {/* Footer

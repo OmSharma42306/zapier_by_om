@@ -98,7 +98,7 @@ export default function SetupModal({
               {googleDocsEvent&& (
                 <div className="mt-4">
                   <h1>google docs : {cellIndex}</h1>
-                  <GoogleDocsConfigure index={cellIndex} toolName={tool.name}/>
+                  <GoogleDocsConfigure index={cellIndex} toolsInfo={tool}/>
                 </div>
               )}
             </div>
