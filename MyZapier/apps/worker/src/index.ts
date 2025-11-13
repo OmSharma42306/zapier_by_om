@@ -2,6 +2,7 @@ import { prismaClient as client } from "@repo/db";
 import { Worker} from "bullmq"
 import IORedis  from "ioredis"
 import { GOOGLE_DOCS } from "@repo/google"
+import { myQueue } from "@repo/queue";
 
 const connection = new IORedis({maxRetriesPerRequest:null});
 const { GOOGLE_DOCS_ACTIONS } = GOOGLE_DOCS;
@@ -19,8 +20,8 @@ const worker = new Worker('sweeper',async (job:any)=>{
         select:{userId:true},
         where:{id : zapId}}
     );
-
-     const userId = userIdOfZap.userID;
+    
+    const userId = userIdOfZap.userId;
     console.log("user ID **************",userId)
     console.log("pre data",zapRuns);
     
@@ -62,6 +63,39 @@ const worker = new Worker('sweeper',async (job:any)=>{
     console.log("text Type: ",text);
     console.log("documentId Type: ",documentId);
     console.log("index",index);
+
+    // write next index fetch and put into queue....
+    const outboxEntry = await client.zapRunOutbox.findMany({
+        where : {
+            zapRun : {
+                index : index + 1, 
+            }
+        },
+        take : 1, 
+        orderBy : {
+            zapRun : {index : "asc"},
+        },
+        include : {zapRun : true},
+    });
+
+    console.log("outbox entry,", outboxEntry);
+    console.log("**** Putting into Queue ***** ");
+    await myQueue.add("zapProcess",{
+         zapRunId: outboxEntry[0].zapRunId,
+        zapId: outboxEntry[0].zapRun.zapId,
+        index: outboxEntry[0].zapRun.index,
+    });
+    console.log("**** finally put into Queue ***** ");
+
+    await client.zapRunOutbox.deleteMany({
+        where : {
+            id : {
+                in : outboxEntry.map((r)=>r.id),
+            }
+        }
+    });
+    
+    console.log("deleted entry from outbox table ....");
 
 
     
