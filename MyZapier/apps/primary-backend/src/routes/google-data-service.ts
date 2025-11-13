@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/getGoogleDataInfo',async(req:Request,res:Response)=>{
     try{
         // const userId = req.userId;
-        const userId = 4;
+        const userId = 5;
         const googleAuth : any = await client.user.findMany({
             select:{
                 googleAuth : true

@@ -148,8 +148,10 @@ trigger:{
 router.post('/add-all-actions-to-zapRuns',async(req:Request,res:Response)=>{
     try{
         // fetch all actions with zap id 
+        const zapId = req.body.zapId;
+        console.log("zap id at : ",zapId);
         const allActions = await client.action.findMany({
-            where : {zapId : '29dd7a7d-7fc7-4579-86b9-e475da367822'}
+            where : {zapId : zapId}
         });
 
         if (allActions.length === 0){
@@ -177,7 +179,8 @@ router.post('/add-all-actions-to-zapRuns',async(req:Request,res:Response)=>{
                 });
             }
         })
-
+    res.status(200).json({ msg : "All Actions Inserted into Zapruns Successfully..!"});
+    return;
     }catch(error){
         res.status(400).json({msg : error});
         return;
