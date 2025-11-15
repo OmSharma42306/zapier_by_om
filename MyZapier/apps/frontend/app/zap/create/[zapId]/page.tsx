@@ -6,6 +6,7 @@ import { useState } from "react";
 import ToolPickerModal from "@/components/ToolPickerModal";
 import SetupModal from "@/components/SetupModal";
 import { useParams } from "next/navigation";
+import { saveAllActionsToZapRunsDBTable } from "@/api/api"
 
 interface CellData {
   title: string;
@@ -74,6 +75,11 @@ console.log("Action Name",actionName);
       setSetUpOpen(true);
     }
   };
+    const handleProcessToAddAllActions = async () => {
+      const response = await saveAllActionsToZapRunsDBTable(zapId);
+      console.log(response);
+      alert(response.msg);
+    }
 
     return (
         <>
@@ -136,6 +142,8 @@ console.log("Action Name",actionName);
         />
 
     </div>
+
+    <button onClick={handleProcessToAddAllActions}>Proceed</button>
     </>
   );
 }

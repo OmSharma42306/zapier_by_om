@@ -76,3 +76,12 @@ export async function saveActionToDB(action:any){
 // }
 
 }
+
+// add all actions to ZapRuns Section....
+export async function saveAllActionsToZapRunsDBTable(zapId : string){
+    console.log("zapId: ",zapId);
+
+    const response = await axios.post('http://localhost:5000/api/v1/zap/add-all-actions-to-zapRuns',{zapId : zapId});
+    console.log(response.data);
+    return response.data;
+}
