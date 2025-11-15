@@ -20,10 +20,11 @@ interface ActionMetadata{
   documentId : string;
 }
 
-interface Action{
+export interface Action{
 id : string;
 actionId : string;
 zapId : string;
+iconUrl? : string;
 metadata : ActionMetadata
 index : number;
 }
