@@ -2,9 +2,12 @@ import { Request, Response, Router } from "express";
 import authMiddleware from "../middleware/middleware";
 import {zapCreateSchema} from "@repo/common"
 import {prismaClient as client} from "@repo/db";
+import { ZapState } from "../types/index"
 
 interface authRequest extends Request{
     userId? : Number;
+    zapId? : string;
+
 }
 const router = Router();
 
@@ -117,31 +120,34 @@ router.get('/get-all-zaps',authMiddleware,async(req:any,res:any)=>{
 
 
 
-router.get('/:id',authMiddleware,async(req:any,res:any)=>{
-    // particular zap 
-    const id = req.id;
-    console.log("i am here!")
-    const zapId = req.params.id;
-    const particularZap = await client.zap.findFirst({where:{
-        userId:id,
-        id:zapId
-    },
-include:{action:{
-    include:{
-        type:true
+
+
+
+router.get('/fetch-zap-state',async(req:any,res : Response)=>{
+    try{
+
+        console.log("i am here x !");
+        const zapId : any = req.query.zapId;
+        console.log('Zap id',zapId);
+        const zapState : ZapState | any= await client.zap.findMany({
+            select : {trigger : true , action : true,},
+            where : {id : zapId}
+        });
+        const trigger = zapState[0]?.trigger;
+        console.log("za",zapState);
+        console.log(trigger);
+if( trigger.triggerId === '218e06d7-bf14-4334-9e12-a0205b209314'){
+    trigger['triggerName'] = "WebHook";
+};
+        console.log("zapState : ",zapState);
+        res.status(200).json({msg : zapState});
+        return;
+    }catch(error){
+        res.status(400).json({msg : error});
+        return;
     }
-},
-trigger:{
-    include:{
-        type:true
-    }
-}
-}})
+})
 
-    return res.status(200).json({particularZap});
-
-
-});
 
 
 
@@ -185,8 +191,33 @@ router.post('/add-all-actions-to-zapRuns',async(req:Request,res:Response)=>{
         res.status(400).json({msg : error});
         return;
     }
-})
+});
 
+router.get('/:id',authMiddleware,async(req:any,res:any)=>{
+    // particular zap 
+    const id = req.id;
+    console.log("i am here!")
+    const zapId = req.params.id;
+    const particularZap = await client.zap.findFirst({where:{
+        userId:id,
+        id:zapId
+    },
+include:{action:{
+    include:{
+        type:true
+    }
+},
+trigger:{
+    include:{
+        type:true
+    }
+}
+}})
+
+    return res.status(200).json({particularZap});
+
+
+});
 
 export const zapRouter = router;
 
