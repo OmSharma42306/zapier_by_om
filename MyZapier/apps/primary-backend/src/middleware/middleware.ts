@@ -16,12 +16,14 @@ async function authMiddleware(req:AuthRequest,res:Response,next:NextFunction){
     try{
         if(!authHeader || !authHeader.startsWith("Bearer ")){
             res.json({msg:"Missing Headers!"});
+            return;
         }
     
         const token : string | undefined = authHeader?.split(' ')[1];
         const decodedToken = await jwt.verify(token as string,JWT_SECRET as string)
         if(!decodedToken){
             res.json({msg:"Middleware Failed!"});
+            return;
         }
         console.log("Successfully! token created!",token)
     
@@ -34,6 +36,7 @@ async function authMiddleware(req:AuthRequest,res:Response,next:NextFunction){
     
     }catch(error){
         res.json({error});
+        return;
     }
 }
 
