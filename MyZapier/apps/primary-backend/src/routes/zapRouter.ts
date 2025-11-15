@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import authMiddleware from "../middleware/middleware";
 import {zapCreateSchema} from "@repo/common"
 import {prismaClient as client} from "@repo/db";
-import { ZapState } from "../types/index"
+import { ZapState,Action } from "../types/index"
 
 interface authRequest extends Request{
     userId? : Number;
@@ -125,8 +125,6 @@ router.get('/get-all-zaps',authMiddleware,async(req:any,res:any)=>{
 
 router.get('/fetch-zap-state',async(req:any,res : Response)=>{
     try{
-
-        console.log("i am here x !");
         const zapId : any = req.query.zapId;
         console.log('Zap id',zapId);
         const zapState : ZapState | any= await client.zap.findMany({
@@ -134,11 +132,21 @@ router.get('/fetch-zap-state',async(req:any,res : Response)=>{
             where : {id : zapId}
         });
         const trigger = zapState[0]?.trigger;
-        console.log("za",zapState);
-        console.log(trigger);
-if( trigger.triggerId === '218e06d7-bf14-4334-9e12-a0205b209314'){
-    trigger['triggerName'] = "WebHook";
-};
+        
+        if (trigger.triggerId === '218e06d7-bf14-4334-9e12-a0205b209314'){
+            trigger['triggerName'] = "WebHook";
+            trigger['iconUrl'] = "http://res.cloudinary.com/dyiovhrlr/image/upload/v1755594143/gormbxetyvfmkfvi5rp8.png"
+        };
+        
+        const actions = zapState[0].action.map((action:Action)=>{
+                if(action.metadata.appName === 'Google Docs'){
+                    action['iconUrl'] = 'http://res.cloudinary.com/dyiovhrlr/image/upload/v1755594084/ubzegyi2tlspcvzbbje5.png'
+                }else if(action.metadata.appName === 'Google Sheet'){
+                    action['iconUrl'] = 'http://res.cloudinary.com/dyiovhrlr/image/upload/v1755594127/jsvwohrkda8vp3t5ionq.png'
+                }else if(action.metadata.appName === "Gmail"){
+                    action['iconUrl'] = 'http://res.cloudinary.com/dyiovhrlr/image/upload/v1755594046/dyvxaw5lq0vscc6unoa9.png'
+                }
+        });
         console.log("zapState : ",zapState);
         res.status(200).json({msg : zapState});
         return;
