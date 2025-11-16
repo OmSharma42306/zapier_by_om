@@ -31,9 +31,38 @@ router.get('/get-webhooks-data',async(req:Request,res:Response)=>{
         return;
     }
 
-})
+});
 
+router.post('/add-trigger',async(req:Request,res:Response)=>{
+    try{    
+        const zapId = req.body.zapId;
+        const triggerId = req.body.triggerId;
 
+        const zapExists = await client.zap.findMany({
+            where : {id : zapId}
+        });
+
+        if(!zapExists || zapExists.length <= 0){
+            res.status(404).json({ msg : "zap not exists!"});
+            return;
+
+        }
+
+        const addTrigger = await client.trigger.create({
+            data : {
+                zapId : zapId,
+                triggerId : triggerId        
+            }
+        });
+        
+        res.status(200).json({ msg : "Trigger Added Successfully!"});
+        return;
+
+    }catch(error){
+        res.status(400).json({ msg : error });
+        return;
+    }
+});
 
 
 
