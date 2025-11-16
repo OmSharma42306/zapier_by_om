@@ -34,7 +34,10 @@ export async function createZapApi(token : string){
     return response.data;
 }
 
-
+export async function saveTriggerToDB(zapId : string, triggerId : string){
+    const response = await axios.post('http://localhost:5000/api/v1/trigger/add-trigger',{zapId : zapId, triggerId : triggerId});
+    return response.data;
+}
 
 // actions environment
 
@@ -83,11 +86,5 @@ export async function saveAllActionsToZapRunsDBTable(zapId : string){
 
     const response = await axios.post('http://localhost:5000/api/v1/zap/add-all-actions-to-zapRuns',{zapId : zapId});
     console.log(response.data);
-    return response.data;
-};
-
-
-export async function fetchZapState(zapId : string){
-    const response = await axios.get(`http://localhost:5000/api/v1/zap/fetch-zap-state?zapId=${zapId}`);
     return response.data;
 }

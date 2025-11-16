@@ -1,6 +1,7 @@
 import { useState } from "react";
 import WebhookListening from "./WebHookListening";
 import GoogleDocsConfigure from "./GoogleDocsConfigure";
+import {saveTriggerToDB} from "@/api/api"
 
 interface SetupModalProps {
   isOpen: boolean;
@@ -36,6 +37,17 @@ export default function SetupModal({
     onSave(formData);
     onClose();
   };
+
+  // function to save trigger data
+  const handleSaveTriggerData = async () => {
+    const triggerId = "218e06d7-bf14-4334-9e12-a0205b209314";
+    
+    if(!zapId) return;
+    
+    const response = await saveTriggerToDB(zapId,triggerId);
+    console.log('trigger response',response);
+    alert(response.msg);
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -75,6 +87,9 @@ export default function SetupModal({
                   <WebhookListening />
                 </div>
               )}
+              {webhookSet ? <>
+              <button onClick={handleSaveTriggerData}><h1>Save Trigger</h1></button>
+              </>: ""}
             </div>
           </div>
         )}
