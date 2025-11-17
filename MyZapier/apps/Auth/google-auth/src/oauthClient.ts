@@ -7,7 +7,11 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 
 const SCOPES = ['https://www.googleapis.com/auth/documents',"https://www.googleapis.com/auth/drive.metadata.readonly",
-  "https://www.googleapis.com/auth/drive.readonly"];
+  "https://www.googleapis.com/auth/drive.readonly", // REQUIRED for sending emails
+  "https://www.googleapis.com/auth/gmail.send",
+
+  // REQUIRED because you apply labels
+  "https://www.googleapis.com/auth/gmail.labels",];
 
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,
