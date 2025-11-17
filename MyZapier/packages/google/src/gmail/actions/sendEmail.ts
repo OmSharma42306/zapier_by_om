@@ -7,23 +7,34 @@ export async function sendEmail(userId : number, data : any){
     // send email with data
     const {to,subject,body,addSignature,labelId} = data;
 
+    console.log("i am here at gmail");
+    console.log("data",data);
+    console.log("userId",userId);
+
     const authData : any = await client.user.findMany({
         select : { googleAuth : true },
         where : { id : userId }
     });
 
-    if(!authData || !authData.googleAuth[0]) return;
+    console.log(authData[0]);
+    console.log(authData[0].googleAuth);
+    
 
+    // if(!authData || !authData.googleAuth[0]) return;
+    if(!authData) return;
+    console.log("pass 1");
     let googleAuthToken;
 
-    let googleAuthInfo = authData.googleAuth[0];
+    let googleAuthInfo = authData[0].googleAuth[0];
     googleAuthToken = googleAuthInfo.allTokens;
 
     if(!googleAuthToken) return;
+    console.log("pass 2");
 
     oauth2Client.setCredentials(googleAuthToken);
-
+    console.log("all set",googleAuthToken);
     try{
+        console.log("pass 3 try");
         const gmail = google.gmail({ version : "v1", auth : oauth2Client});
 
         // build the body
@@ -50,6 +61,7 @@ export async function sendEmail(userId : number, data : any){
         requestBody : {raw : encodedMessage},
       });
 
+      console.log("sendttomg",sent);
 
     const messageId = sent.data.id;
 
@@ -64,6 +76,7 @@ export async function sendEmail(userId : number, data : any){
       });
     };
 
+    console.log("finally done!");
     return { success: true };
     
     }catch(error){
