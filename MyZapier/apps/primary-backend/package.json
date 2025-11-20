@@ -10,7 +10,8 @@
   "devDependencies": {
     "@repo/common": "*",
     "@repo/db": "*",
-    "@types/jsonwebtoken": "^9.0.10"
+    "@types/jsonwebtoken": "^9.0.10",
+    "typescript": "^5.9.3"
   },
   "keywords": [],
   "author": "",
