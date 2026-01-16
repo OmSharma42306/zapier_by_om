@@ -2,6 +2,7 @@ import { useState } from "react";
 import WebhookListening from "./WebHookListening";
 import GoogleDocsConfigure from "./GoogleDocsConfigure";
 import {saveTriggerToDB} from "@/api/api"
+import GmailConfigure from "./GmailConfigure";
 
 interface SetupModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export default function SetupModal({
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [webhookSet, setWebHookSet] = useState(false);
   const [googleDocsEvent,setGoogleDocsEvent] = useState('');
+  const [gmailEvent,setGmailEvent] = useState('');
   console.log(webhookSet);
   if (!isOpen || !tool) return null;
   console.log(tool);
@@ -124,25 +126,34 @@ export default function SetupModal({
         )}
 
         {tool.name === "Gmail" && (
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-semibold">Recipient Email</label>
-              <input
-                type="email"
-                className="w-full border rounded p-2"
-                onChange={(e) => handleChange("recipient", e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-semibold">Subject</label>
-              <input
-                type="text"
-                className="w-full border rounded p-2"
-                onChange={(e) => handleChange("subject", e.target.value)}
-              />
-            </div>
-          </div>
-        )}
+  <div className="space-y-4">
+    <div>
+      <label className="text-sm font-semibold">Gmail Events</label>
+
+      <select
+        className="w-full border rounded p-2"
+        onChange={(e) => {
+          handleChange("actionEvent", e.target.value);
+          console.log(e.target.value);
+
+          if (e.target.value) {
+            setGmailEvent(e.target.value);
+          }
+        }}
+      >
+        <option value="">Select an event</option>
+        <option value="sendEmail">Send Email</option>
+      </select>
+
+      {gmailEvent && (
+        <div className="mt-4">
+          <h1>gmail : {cellIndex}</h1>
+          <GmailConfigure index={cellIndex} toolsInfo={tool} zapId={zapId} />
+        </div>
+      )} 
+    </div>
+  </div>
+)}
 
         {/* Save Button */}
         <div className="mt-6 flex justify-end gap-3">
