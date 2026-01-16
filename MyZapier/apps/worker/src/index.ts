@@ -1,11 +1,12 @@
 import { prismaClient as client } from "@repo/db";
 import { Worker} from "bullmq"
 import IORedis  from "ioredis"
-import { GOOGLE_DOCS } from "@repo/google"
+import { GOOGLE_DOCS, GMAIL } from "@repo/google"
 import { myQueue } from "@repo/queue";
 
 const connection = new IORedis({maxRetriesPerRequest:null});
 const { GOOGLE_DOCS_ACTIONS } = GOOGLE_DOCS;
+const { GOOGLE_GMAIL_ACTIONS } = GMAIL;
 
 const worker = new Worker('sweeper',async (job:any)=>{
     console.log("Job data",job.data);
@@ -25,43 +26,40 @@ const worker = new Worker('sweeper',async (job:any)=>{
     console.log("user ID **************",userId)
     console.log("pre data",zapRuns);
     
-    // data format!
-//    {
-//   id: '3d8b3e83-aee5-48bb-b602-b2bba9afc7b6',
-//   zapId: '29dd7a7d-7fc7-4579-86b9-e475da367822',
-//   metadata: {
-//     text: 'Tere Bina Tere Bina Beswadi Ye duniya',
-//     type: 'Action',
-//     appName: 'Google Docs',
-//     operation: 'Append Text',
-//     documentId: '1G6sDTT57pQe4aFjukIjIJhtMnyV4JEbKFbTKPkooyc0'
-//   },
-//   index: 1
-// }
-    
     let zapRunsId = zapRuns.id;
     let metadata = zapRuns.metadata;
     let zapRunIndex = zapRuns.index;
     let metaDataType = metadata.type;
     let appName = metadata.appName;
     let operationType = metadata.operation;
-    let text = metadata.text;
-    let documentId = metadata.documentId;
+    
 
     if(metaDataType === 'Action'){
         
         if(appName === 'Google Docs'){
             // call append text.
+            let text = metadata.text;
+            let documentId = metadata.documentId;
             await GOOGLE_DOCS_ACTIONS.appendToGoogleDocs(userId,documentId,text);
-            // console.log(response.data);
+
+        }else if(appName === 'Gmail'){
+            if(operationType === 'Send Email'){
+                const to =  metadata.to;
+                const subject = metadata.subject;
+                const body = metadata.body;
+                const addSignature = metadata.addSignature;
+                const labelId = metadata.labelId;
+
+                await GOOGLE_GMAIL_ACTIONS.sendEmail(userId,{to,subject,body,addSignature,labelId});
+                
+                
+            }
         }
     }
 
     console.log("Action Type: ",metaDataType);
     console.log("appName Type: ",appName);
     console.log("operationType Type: ",operationType);
-    console.log("text Type: ",text);
-    console.log("documentId Type: ",documentId);
     console.log("index",index);
 
     // write next index fetch and put into queue....
@@ -95,9 +93,6 @@ const worker = new Worker('sweeper',async (job:any)=>{
         }
     });
     
-    console.log("deleted entry from outbox table ....");
-
-
-    
+    console.log("deleted entry from outbox table ....");        
 },{connection})
 
