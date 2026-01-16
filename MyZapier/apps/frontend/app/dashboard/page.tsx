@@ -1,5 +1,6 @@
 "use client"
 import { Appbar } from "@/components/Appbar";
+import { DashboardZapsLoader } from "@/components/DashboardZapsLoader";
 import { DarkButton } from "@/components/buttons/DarkButton";
 import { LinkButton } from "@/components/buttons/LinkButton";
 import axios from "axios";
@@ -129,7 +130,7 @@ export default function(){
         
         </div>
         {
-        loading ? "Loading...":<div className="flex justify-center"><ZapTable zaps={zaps}/></div>
+        loading ? <DashboardZapsLoader/>:<div className="flex justify-center"><ZapTable zaps={zaps}/></div>
          }
          
     </div>
