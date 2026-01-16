@@ -6,12 +6,14 @@ import { zapRouter } from "./routes/zapRouter";
 import { triggerRouter } from "./routes/trigger";
 import { actionRouter } from "./routes/action"
 import { googleDataServiceRouter } from "./routes/google-data-service"
+import helmet from "helmet";
 const app = express();
 const PORT = 5000;
 
 app.use(cors());
-app.use(express.json());
-app.use(globalRateLimiter)
+app.use(express.json({limit : "10kb"}));
+app.use(globalRateLimiter);
+app.use(helmet());
 
 app.use('/api/v1/user',userRouter);
 app.use('/api/v1/zap',zapRouter);
