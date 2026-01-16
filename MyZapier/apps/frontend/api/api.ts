@@ -88,3 +88,10 @@ export async function saveAllActionsToZapRunsDBTable(zapId : string){
     console.log(response.data);
     return response.data;
 }
+
+// fetch zap state by ZapId
+export async function fetchZapState(zapId : string){
+    const response = await axios.get(`http://localhost:5000/api/v1/zap/fetch-zap-state`,{params : {zapId : zapId}});
+    console.log(response.data);
+    return response.data;
+}
