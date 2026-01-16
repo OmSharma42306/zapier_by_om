@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import authMiddleware from "../middleware/middleware";
 import {signInSchema,signUpSchema} from "@repo/common"
 import dotenv from "dotenv"
-
+import { authRateLimiter } from "../middleware/ratelimit";
 dotenv.config();
 
 const JWT_SECRET : string | any = process.env.JWT_SECRET;
@@ -19,7 +19,7 @@ interface AuthRequest extends Request{
 }
 
 // signup endpoint
-router.post('/signup',async(req:any,res:any)=>{
+router.post('/signup',authRateLimiter,async(req:any,res:any)=>{
     console.log("i am here at signup")
     const name = req.body.name;
     const email = req.body.email;
@@ -63,7 +63,7 @@ router.post('/signup',async(req:any,res:any)=>{
 })
 
 // login endpoint
-router.post('/login',async(req:any,res:any)=>{
+router.post('/login',authRateLimiter,async(req:any,res:any)=>{
     const email = req.body.email;
     const password = req.body.password;
 
