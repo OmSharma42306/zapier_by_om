@@ -208,10 +208,19 @@ export default function GoogleDocsConfigure({index,toolsInfo,zapId}:any) {
             </label>
           </div>
         </div>
-         <div>
-          
-          <button onClick={saveAction}>Save Data</button>
-          </div>
+        <div>
+  <button
+    onClick={saveAction}
+    disabled={!isFormValid}
+    className={`px-4 py-2 rounded-md text-sm ${
+      isFormValid
+        ? "bg-black text-white hover:bg-gray-900"
+        : "bg-gray-100 text-gray-400 cursor-not-allowed"
+    }`}
+  >
+    Save Data
+  </button>
+</div>
       </div>
 
       {/* Footer
