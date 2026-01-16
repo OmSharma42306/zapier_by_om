@@ -88,7 +88,7 @@ console.log("Action Name",actionName);
         </div>
     <div className="flex flex-col items-center gap-8 p-10 bg-gray-50 min-h-screen">
             {cells.map((cell,i)=>(
-                <>
+                <div key={i}>
                 <ZapCell
                 
                     key={i} 
@@ -112,7 +112,7 @@ console.log("Action Name",actionName);
                     iconUrl={cell.iconUrl}
                     />
                     <h1>{i}</h1>
-                    </>
+                    </div>
                     
             ))}
 

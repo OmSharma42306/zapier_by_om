@@ -1,5 +1,9 @@
 import axios from "axios";
-const token = localStorage.getItem('token')
+
+function getToken(){
+    if(typeof window === "undefined") return null;
+    return localStorage.getItem('token');
+}
 
 export async function getAvilableTriggers(){
     const response = await axios.get('http://localhost:5000/api/v1/trigger/get-avilable-triggers');
@@ -42,7 +46,7 @@ export async function saveTriggerToDB(zapId : string, triggerId : string){
 // actions environment
 
 export async function saveActionToDB(action:any){
-    console.log(token);
+    const token = getToken();
     console.log("api : ",action);
     const {zapId , actionId, metadata,index} = action;
     const response = await axios.post('http://localhost:5000/api/v1/action/add-action',{zapId,actionId,metadata,index},{
